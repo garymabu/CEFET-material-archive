@@ -1,29 +1,32 @@
 'use client';
 
-import Image from 'next/image';
 import { useForm } from 'react-hook-form';
+import Image from 'next/image';
+import { PasswordResetStageProps } from '../page';
 
-interface LoginInfo {
+interface ResetPasswordInfo {
   username: string;
   password: string;
 }
 
-export default function LoginForm() {
-  const { register, handleSubmit } = useForm<LoginInfo>({
+export default function ResetPasswordForm({
+  moveToNextStage,
+}: PasswordResetStageProps) {
+  const { register, handleSubmit } = useForm<ResetPasswordInfo>({
     defaultValues: {
       username: '',
       password: '',
     },
   });
 
-  function handleLogin(data: LoginInfo) {
+  const handleSubmitNewPassword = (data: ResetPasswordInfo) => {
     console.log(data);
-  }
+  };
 
   return (
     <form
       className="flex flex-col justify-between items-center"
-      onSubmit={handleSubmit(handleLogin)}
+      onSubmit={handleSubmit(handleSubmitNewPassword)}
     >
       <div className="flex flex-col justify-center items-start gap-2 w-full">
         <div className="w-full mt-5">
