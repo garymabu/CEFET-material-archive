@@ -1,35 +1,38 @@
-'use client';
-
+import {
+  AuthResult,
+  AuthService,
+} from '@/app/integration/cefet-material-archive/auth/auth.service';
 import { useForm } from 'react-hook-form';
 import { PasswordResetStageProps } from '../page';
 import { useAuthedMutation } from '@/app/hooks/useAuthedMutation.hook';
-import { AuthService } from '@/app/integration/cefet-material-archive/auth/auth.service';
 
-export default function CheckUserForm({
+export default function ChallengeForm({
   moveToNextStage,
-  onReceiveUserId,
+  userId,
+  onReceiveAuthData,
 }: {
-  onReceiveUserId: (userId: string) => void;
+  userId?: string;
+  onReceiveAuthData: (authData: AuthResult) => void;
 } & PasswordResetStageProps) {
   const authService = new AuthService();
   const {
-    mutate: login,
+    mutate: sendChallengeResult,
     isLoading,
     isError,
     error,
     isSuccess,
   } = useAuthedMutation(
-    (email: string) => authService.challengeEmailIfExists(email),
+    (email: string) => authService.applyChallengeResults(userId ?? '', email),
     {
-      onSuccess: ({ data: { userId } }) => {
-        onReceiveUserId(userId);
+      onSuccess: ({ data }) => {
+        onReceiveAuthData(data);
         moveToNextStage();
       },
     }
   );
   const { register, handleSubmit } = useForm({
     defaultValues: {
-      email: '',
+      challengeCode: '',
     },
   });
 
@@ -37,7 +40,7 @@ export default function CheckUserForm({
     <form
       className="flex flex-col justify-between items-center"
       onSubmit={handleSubmit((data) => {
-        login(data.email);
+        sendChallengeResult(data.challengeCode);
       })}
     >
       <div className="flex flex-col justify-center items-start gap-2 w-full">
@@ -46,12 +49,12 @@ export default function CheckUserForm({
         </h1>
         <div className="w-full mt-5">
           <label className="text-sm font-semibold text-gray-600">
-            E-mail cadastrado
+            Código enviado para o e-mail
           </label>
           <input
             className="w-full h-8 border border-slate-600 rounded-sm p-2"
             type="text"
-            {...register('email')}
+            {...register('challengeCode')}
             required
           />
         </div>

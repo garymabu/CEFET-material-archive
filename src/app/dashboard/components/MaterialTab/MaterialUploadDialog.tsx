@@ -1,3 +1,4 @@
+import { useAuthedMutation } from '@/app/hooks/useAuthedMutation.hook';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -14,6 +15,8 @@ export default function MaterialUploadDialog({
   isUploadDialogOpen,
   closeUploadDialog,
 }: MaterialUploadDialogProps) {
+  // const {} = useAuthedMutation(())
+
   return (
     <Dialog
       open={isUploadDialogOpen}

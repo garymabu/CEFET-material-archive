@@ -1,49 +1,66 @@
 'use client';
 
 import { useForm } from 'react-hook-form';
-import Image from 'next/image';
 import { PasswordResetStageProps } from '../page';
-
-interface ResetPasswordInfo {
-  username: string;
-  password: string;
-}
+import { useAuthedMutation } from '@/app/hooks/useAuthedMutation.hook';
+import { UserService } from '@/app/integration/cefet-material-archive/user/user.service';
+import { AuthStorage } from '@/app/storage/auth.storage';
 
 export default function ResetPasswordForm({
   moveToNextStage,
 }: PasswordResetStageProps) {
-  const { register, handleSubmit } = useForm<ResetPasswordInfo>({
+  const userService = new UserService();
+  const {
+    mutate: applyPasswordChange,
+    isLoading,
+    isError,
+    error,
+    isSuccess,
+  } = useAuthedMutation(
+    (newPassword: string) =>
+      userService.changePassword(AuthStorage.get().userId, newPassword),
+    {
+      onSuccess: ({}) => {
+        moveToNextStage();
+      },
+    }
+  );
+  const { register, handleSubmit } = useForm({
     defaultValues: {
-      username: '',
       password: '',
+      confirmPassword: '',
     },
   });
-
-  const handleSubmitNewPassword = (data: ResetPasswordInfo) => {
-    console.log(data);
-  };
 
   return (
     <form
       className="flex flex-col justify-between items-center"
-      onSubmit={handleSubmit(handleSubmitNewPassword)}
+      onSubmit={handleSubmit((data) => {
+        if (data.password !== data.confirmPassword) {
+          alert('As senhas não coincidem');
+          return;
+        }
+        applyPasswordChange(data.password);
+      })}
     >
       <div className="flex flex-col justify-center items-start gap-2 w-full">
         <div className="w-full mt-5">
-          <label className="text-sm font-semibold text-gray-600">Usuário</label>
+          <label className="text-sm font-semibold text-gray-600">Senha</label>
           <input
             className="w-full h-8 border border-slate-600 rounded-sm p-2"
             type="text"
-            {...register('username')}
+            {...register('password')}
             required
           />
         </div>
         <div className="w-full">
-          <label className="text-sm font-semibold text-gray-600">Senha</label>
+          <label className="text-sm font-semibold text-gray-600">
+            Confirme a senha
+          </label>
           <input
             className="w-full h-8 border border-slate-600 rounded-sm p-2"
             type="password"
-            {...register('password')}
+            {...register('confirmPassword')}
             required
           />
         </div>

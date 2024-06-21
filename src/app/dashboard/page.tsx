@@ -23,23 +23,23 @@ export enum Tab {
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState<Tab>(Tab.FILE);
-  
+
   const [isFeedBackDialogOpen, setIsFeedBackDialogOpen] = useState(false);
   const openFeedbackDialog = () => setIsFeedBackDialogOpen(true);
   const closeFeedbackDialog = () => setIsFeedBackDialogOpen(false);
-  
+
   const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
   const openUploadDialog = () => setIsUploadDialogOpen(true);
   const closeUploadDialog = () => setIsUploadDialogOpen(false);
-  
+
   const [isProfessorDialogOpen, setIsProfessorDialogOpen] = useState(false);
   const openProfessorDialog = () => setIsProfessorDialogOpen(true);
   const closeProfessorDialog = () => setIsProfessorDialogOpen(false);
-  
+
   const [isStudentDialogOpen, setIsStudentDialogOpen] = useState(false);
   const openStudentDialog = () => setIsStudentDialogOpen(true);
   const closeStudentDialog = () => setIsStudentDialogOpen(false);
-  
+
   const [isSubjectDialogOpen, setIsSubjectDialogOpen] = useState(false);
   const openSubjectDialog = () => setIsSubjectDialogOpen(true);
   const closeSubjectDialog = () => setIsSubjectDialogOpen(false);
@@ -67,7 +67,7 @@ export default function Dashboard() {
           <div className="flex flex-col gap-8">
             <Filter />
             <AddNewButton openDialog={openStudentDialog} />
-            <StudentTable openDialog={openStudentDialog}/>
+            <StudentTable openDialog={openStudentDialog} />
             <StudentDialog
               isDialogOpen={isStudentDialogOpen}
               closeDialog={closeStudentDialog}
@@ -78,9 +78,7 @@ export default function Dashboard() {
           <div className="flex flex-col gap-8">
             <Filter />
             <AddNewButton openDialog={openProfessorDialog} />
-            <ProfessorTable
-              openDialog={openProfessorDialog}
-            />
+            <ProfessorTable openDialog={openProfessorDialog} />
             <ProfessorDialog
               isDialogOpen={isProfessorDialogOpen}
               closeDialog={closeProfessorDialog}
@@ -91,9 +89,7 @@ export default function Dashboard() {
           <div className="flex flex-col gap-8">
             <Filter />
             <AddNewButton openDialog={openProfessorDialog} />
-            <SubjectTable 
-              openDialog={openSubjectDialog}
-            />
+            <SubjectTable openDialog={openSubjectDialog} />
             <SubjectDialog
               isDialogOpen={isSubjectDialogOpen}
               closeDialog={closeSubjectDialog}

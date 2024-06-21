@@ -9,50 +9,28 @@ import TableHead from '@mui/material/TableHead';
 import Paper from '@mui/material/Paper';
 import TablePaginationActions from '../TablePaginationActions';
 import { useState, ChangeEvent, MouseEvent } from 'react';
+import { Material } from '@/app/entity/material.entity';
+import { useAuthedQuery } from '@/app/hooks/useAuthedQuery.hook';
+import { MaterialService } from '@/app/integration/cefet-material-archive/material/material.service';
 
 interface MaterialTableProps {
   openFeedbackDialog: () => void;
 }
 
-const rows = [
-  { name: 'Prova 1', class: 'Matemática' },
-  { name: 'Prova 2', class: 'Português' },
-  { name: 'Prova 3', class: 'História' },
-  { name: 'Prova 4', class: 'Geografia' },
-  { name: 'Prova 5', class: 'Física' },
-  { name: 'Prova 6', class: 'Química' },
-  { name: 'Prova 7', class: 'Biologia' },
-  { name: 'Prova 8', class: 'Inglês' },
-  { name: 'Prova 9', class: 'Espanhol' },
-  { name: 'Prova 10', class: 'Artes' },
-  { name: 'Prova 11', class: 'Educação Física' },
-  { name: 'Prova 12', class: 'Filosofia' },
-  { name: 'Prova 13', class: 'Sociologia' },
-  { name: 'Prova 14', class: 'Ensino Religioso' },
-  { name: 'Prova 15', class: 'Língua Portuguesa' },
-  { name: 'Prova 16', class: 'Matemática' },
-  { name: 'Prova 17', class: 'Português' },
-  { name: 'Prova 18', class: 'História' },
-  { name: 'Prova 19', class: 'Geografia' },
-  { name: 'Prova 20', class: 'Física' },
-  { name: 'Prova 21', class: 'Química' },
-  { name: 'Prova 22', class: 'Biologia' },
-  { name: 'Prova 23', class: 'Inglês' },
-  { name: 'Prova 24', class: 'Espanhol' },
-  { name: 'Prova 25', class: 'Artes' },
-  { name: 'Prova 26', class: 'Educação Física' },
-  { name: 'Prova 27', class: 'Filosofia' },
-  { name: 'Prova 28', class: 'Sociologia' },
-  { name: 'Prova 29', class: 'Ensino Religioso' },
-  { name: 'Prova 30', class: 'Língua Portuguesa' },
-  { name: 'Prova 31', class: 'Matemática' },
-];
-
 export default function MaterialTable({
   openFeedbackDialog,
 }: MaterialTableProps) {
+  const materialService = new MaterialService();
+  const { data } = useAuthedQuery('materials', () =>
+    materialService.getAllMaterials()
+  );
+
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const rows: Material[] = data?.data ?? [];
+
+  console.log('rows', rows);
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -88,9 +66,9 @@ export default function MaterialTable({
             ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             : rows
           ).map((row) => (
-            <TableRow key={row.name} className="w-full">
-              <TableCell className="w-1/2">{row.name}</TableCell>
-              <TableCell className="w-1/2">{row.class}</TableCell>
+            <TableRow key={row.id} className="w-full">
+              <TableCell className="w-1/2">{row.description}</TableCell>
+              <TableCell className="w-1/2">{row.subject.name}</TableCell>
               <TableCell className="flex gap-4">
                 <button
                   className="bg-transparent text-purple-400 border border-solid border-purple-400 font-bold py-2 px-4 rounded"

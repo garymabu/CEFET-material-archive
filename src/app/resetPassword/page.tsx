@@ -1,15 +1,19 @@
 'use client';
 
 import Image from 'next/image';
-import Link from 'next/link';
 import ResetPasswordForm from './components/ResetPasswordForm';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import CheckUserForm from './components/CheckUserForm';
+import ChallengeForm from './components/ChallengeForm';
+import { AuthResult } from '../integration/cefet-material-archive/auth/auth.service';
+import { AuthStorage } from '../storage/auth.storage';
+import { useRouter } from 'next/navigation';
 
 enum ReAuthStage {
   Email,
   ConfirmEmail,
   Password,
+  Redirect,
 }
 
 export interface PasswordResetStageProps {
@@ -17,10 +21,22 @@ export interface PasswordResetStageProps {
 }
 
 export default function ResetPassword() {
+  const router = useRouter();
   const [stage, setStage] = useState<ReAuthStage>(ReAuthStage.Email);
+  const [authData, setAuthData] = useState<AuthResult>();
+  const [userId, setUserId] = useState<string>();
   const moveToNextStage = () => {
     setStage((prev) => prev + 1);
   };
+
+  useEffect(() => {
+    if (authData) AuthStorage.set(authData);
+  }, [authData]);
+  useEffect(() => {
+    if (stage === ReAuthStage.Redirect) {
+      router.push('/dashboard');
+    }
+  }, [stage, router]);
 
   return (
     <main className="flex flex-row justify-center items-center h-screen bg-gray-200">
@@ -33,8 +49,22 @@ export default function ResetPassword() {
           height={640}
         />
         <div className="h-3/5">
-          {stage === ReAuthStage.Email && <CheckUserForm />}
-          {stage === ReAuthStage.ConfirmEmail && <ResetPasswordForm />}
+          {stage === ReAuthStage.Email && (
+            <CheckUserForm
+              onReceiveUserId={setUserId}
+              moveToNextStage={moveToNextStage}
+            />
+          )}
+          {stage === ReAuthStage.ConfirmEmail && (
+            <ChallengeForm
+              moveToNextStage={moveToNextStage}
+              onReceiveAuthData={setAuthData}
+              userId={userId}
+            />
+          )}
+          {stage === ReAuthStage.Password && (
+            <ResetPasswordForm moveToNextStage={moveToNextStage} />
+          )}
         </div>
         <div className="flex items-end h-1/5"></div>
       </section>

@@ -8,7 +8,11 @@ interface LoginInfo {
   password: string;
 }
 
-export default function LoginForm() {
+export default function LoginForm({
+  onLogin,
+}: {
+  onLogin: (args: LoginInfo) => void;
+}) {
   const { register, handleSubmit } = useForm<LoginInfo>({
     defaultValues: {
       username: '',
@@ -17,7 +21,7 @@ export default function LoginForm() {
   });
 
   function handleLogin(data: LoginInfo) {
-    console.log(data);
+    onLogin(data);
   }
 
   return (
