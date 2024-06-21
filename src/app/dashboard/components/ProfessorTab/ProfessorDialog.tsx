@@ -9,6 +9,12 @@ import { useState } from 'react';
 import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
+import { useAuthedQuery } from '@/app/hooks/useAuthedQuery.hook';
+import { TeacherService } from '@/app/integration/cefet-material-archive/teacher/teacher.service';
+import { SubjectService } from '@/app/integration/cefet-material-archive/subject/user.service';
+import { MenuItem, Select } from '@mui/material';
+import { useForm } from 'react-hook-form';
+import { useAuthedMutation } from '@/app/hooks/useAuthedMutation.hook';
 
 interface ProfessorSubjects {
   id: number;
@@ -24,14 +30,18 @@ export default function ProfessorDialog({
   isDialogOpen,
   closeDialog,
 }: ProfessorDialogProps) {
-  const [subject, setSubject] = useState('');
-  const [professorSubjects, setProfessorSubjects] = useState<
-    ProfessorSubjects[]
-  >([
-    { id: 1, name: 'Matemática' },
-    { id: 2, name: 'Português' },
-    { id: 3, name: 'História' },
-  ]);
+  const teacherService = new TeacherService();
+  const { mutate } = useAuthedMutation(
+    (data: { name: string; email: string }) =>
+      teacherService.createTeacher(data),
+    {}
+  );
+  const { register, handleSubmit } = useForm({
+    defaultValues: {
+      name: '',
+      email: '',
+    },
+  });
   return (
     <Dialog
       open={isDialogOpen}
@@ -41,51 +51,39 @@ export default function ProfessorDialog({
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <DialogTitle id="alert-dialog-title">Novo material</DialogTitle>
-      <DialogContent>
-        <TextField
-          autoFocus
-          margin="normal"
-          label="Nome"
-          type="text"
-          fullWidth
-          variant="outlined"
-        />
-      </DialogContent>
-      <DialogContent>
-        <TableBody>
-          {professorSubjects.map((row) => (
-            <TableRow
-              key={row.name}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell>{row.name}</TableCell>
-              <TableCell align="right">
-                <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                  Apagar
-                </button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </DialogContent>
-      <DialogContent>
-        <SubjectSelector subject={subject} setSubject={setSubject} />
-      </DialogContent>
-      <DialogContent>
-        <TextField
-          autoFocus
-          margin="normal"
-          label="Email"
-          type="email"
-          fullWidth
-          variant="outlined"
-        />
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={closeDialog}>Fechar</Button>
-        <Button onClick={closeDialog}>Confirmar</Button>
-      </DialogActions>
+      <form
+        onSubmit={handleSubmit((args) => {
+          mutate(args);
+        })}
+      >
+        <DialogTitle id="alert-dialog-title">Novo Professor</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="normal"
+            label="Nome"
+            type="text"
+            fullWidth
+            variant="outlined"
+            {...register('name')}
+          />
+        </DialogContent>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="normal"
+            label="Email"
+            type="email"
+            fullWidth
+            variant="outlined"
+            {...register('email')}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeDialog}>Fechar</Button>
+          <Button type="submit">Confirmar</Button>
+        </DialogActions>
+      </form>
     </Dialog>
   );
 }

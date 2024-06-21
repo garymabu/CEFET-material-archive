@@ -106,6 +106,7 @@ export default function MaterialUploadDialog({
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             label="Age"
+            className="w-full"
             {...register('subjectId')}
           >
             {classes.map((subject) => (

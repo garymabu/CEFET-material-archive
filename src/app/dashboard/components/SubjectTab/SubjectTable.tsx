@@ -9,6 +9,11 @@ import TableHead from '@mui/material/TableHead';
 import Paper from '@mui/material/Paper';
 import TablePaginationActions from '../TablePaginationActions';
 import { useState, ChangeEvent, MouseEvent } from 'react';
+import { useAuthedQuery } from '@/app/hooks/useAuthedQuery.hook';
+import { SubjectService } from '@/app/integration/cefet-material-archive/subject/user.service';
+import { Teacher } from '@/app/entity/teacher.entity';
+import { Subject } from '@/app/entity/subject.entity';
+import { useAuthedMutation } from '@/app/hooks/useAuthedMutation.hook';
 
 const rows = [
   { name: 'Prova 1', classes: 'Matemática', createdAt: '2021-10-10' },
@@ -36,11 +41,23 @@ interface SubjectTableProps {
   openDialog: () => void;
 }
 
-export default function SubjectTable({
-  openDialog,
-}: SubjectTableProps) {
+export default function SubjectTable({ openDialog }: SubjectTableProps) {
+  const subjectService = new SubjectService();
+  const { data, refetch: refreshSubjects } = useAuthedQuery('materials', () =>
+    subjectService.getAll()
+  );
+  const { mutate: deleteSubject } = useAuthedMutation(
+    (id: number) => subjectService.deleteSubject(id),
+    {
+      onSuccess: () => {
+        refreshSubjects();
+      },
+    }
+  );
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const rows: Subject[] = data?.data ?? [];
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -79,10 +96,12 @@ export default function SubjectTable({
               <TableCell className="w-1/2">{row.name}</TableCell>
               <TableCell className="w-1/2">{row.createdAt}</TableCell>
               <TableCell className="flex gap-4">
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={openDialog}>
-                  Editar
-                </button>
-                <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                <button
+                  onClick={() => {
+                    deleteSubject(row.id);
+                  }}
+                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                >
                   Apagar
                 </button>
               </TableCell>

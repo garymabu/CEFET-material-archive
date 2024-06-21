@@ -5,6 +5,13 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
+import { useAuthedMutation } from '@/app/hooks/useAuthedMutation.hook';
+import {
+  CreateUserDto,
+  UserService,
+} from '@/app/integration/cefet-material-archive/user/user.service';
+import { useForm } from 'react-hook-form';
+import { UserType } from '@/app/integration/cefet-material-archive/auth/auth.service';
 
 interface StudentDialogProps {
   isDialogOpen: boolean;
@@ -15,6 +22,17 @@ export default function StudentDialog({
   isDialogOpen,
   closeDialog,
 }: StudentDialogProps) {
+  const userService = new UserService();
+  const { mutate: createStudent } = useAuthedMutation(
+    (student: CreateUserDto) => userService.createUser(student)
+  );
+  const { register, handleSubmit } = useForm({
+    defaultValues: {
+      name: '',
+      email: '',
+    },
+  });
+
   return (
     <Dialog
       open={isDialogOpen}
@@ -24,31 +42,43 @@ export default function StudentDialog({
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <DialogTitle id="alert-dialog-title">Novo material</DialogTitle>
-      <DialogContent>
-        <TextField
-          autoFocus
-          margin="normal"
-          label="Nome"
-          type="text"
-          fullWidth
-          variant="outlined"
-        />
-      </DialogContent>
-      <DialogContent>
-        <TextField
-          autoFocus
-          margin="normal"
-          label="Email"
-          type="email"
-          fullWidth
-          variant="outlined"
-        />
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={closeDialog}>Fechar</Button>
-        <Button onClick={closeDialog}>Confirmar</Button>
-      </DialogActions>
+      <form
+        onSubmit={handleSubmit((item) =>
+          createStudent({
+            email: item.email,
+            name: item.name,
+            type: UserType.STUDENT,
+          })
+        )}
+      >
+        <DialogTitle id="alert-dialog-title">Novo Aluno</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="normal"
+            label="Nome"
+            type="text"
+            fullWidth
+            variant="outlined"
+            {...register('name')}
+          />
+        </DialogContent>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="normal"
+            label="Email"
+            type="email"
+            fullWidth
+            variant="outlined"
+            {...register('email')}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeDialog}>Fechar</Button>
+          <Button type="submit">Confirmar</Button>
+        </DialogActions>
+      </form>
     </Dialog>
   );
 }

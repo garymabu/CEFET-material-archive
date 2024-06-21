@@ -8,4 +8,12 @@ export class SubjectService {
   async getAll() {
     return this.httpClient.get<Subject[]>('/subject');
   }
+
+  async createSubject(subject: { name: string; teacherId: number }) {
+    return this.httpClient.post('/subject', subject);
+  }
+
+  async deleteSubject(subjectId: number) {
+    return this.httpClient.delete(`/subject/${subjectId}`);
+  }
 }

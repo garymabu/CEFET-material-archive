@@ -76,8 +76,8 @@ export default function MaterialTable({
             : rows
           ).map((row) => (
             <TableRow key={row.id} className="w-full">
-              <TableCell className="w-1/2">{row.description}</TableCell>
-              <TableCell className="w-1/2">{row.subject.name}</TableCell>
+              <TableCell className="w-1/2">{row?.description}</TableCell>
+              <TableCell className="w-1/2">{row?.subject?.name}</TableCell>
               <TableCell className="flex gap-4">
                 <button
                   className="bg-transparent text-purple-400 border border-solid border-purple-400 font-bold py-2 px-4 rounded"
@@ -86,9 +86,6 @@ export default function MaterialTable({
                   }}
                 >
                   Visualizar
-                </button>
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                  Editar
                 </button>
                 <button
                   onClick={() => {

@@ -9,6 +9,10 @@ import TableHead from '@mui/material/TableHead';
 import Paper from '@mui/material/Paper';
 import TablePaginationActions from '../TablePaginationActions';
 import { useState, ChangeEvent, MouseEvent } from 'react';
+import { TeacherService } from '@/app/integration/cefet-material-archive/teacher/teacher.service';
+import { useAuthedQuery } from '@/app/hooks/useAuthedQuery.hook';
+import { Teacher } from '@/app/entity/teacher.entity';
+import { useAuthedMutation } from '@/app/hooks/useAuthedMutation.hook';
 
 const rows = [
   { name: 'Prova 1', classes: 'Matemática', createdAt: '2021-10-10' },
@@ -33,10 +37,25 @@ const rows = [
 ];
 
 interface ProfessorTableProps {
-  openDialog: () => void;
+  openDialog: (id: number) => void;
 }
 
 export default function ProfessorTable({ openDialog }: ProfessorTableProps) {
+  const teacherService = new TeacherService();
+  const { data, refetch: refreshStudents } = useAuthedQuery('teacher', () =>
+    teacherService.getAllTeachers()
+  );
+  const { mutate: deleteTeacher } = useAuthedMutation(
+    (id: number) => teacherService.deleteTeacher(id),
+    {
+      onSuccess: () => {
+        refreshStudents();
+      },
+    }
+  );
+
+  const rows: Teacher[] = data?.data ?? [];
+
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
@@ -75,15 +94,17 @@ export default function ProfessorTable({ openDialog }: ProfessorTableProps) {
             ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             : rows
           ).map((row) => (
-            <TableRow key={row.name} className="w-full">
-              <TableCell className="w-1/3">{row.name}</TableCell>
-              <TableCell className="w-1/3">{row.classes}</TableCell>
+            <TableRow key={row?.user?.displayName} className="w-full">
+              <TableCell className="w-1/3">{row?.user?.displayName}</TableCell>
+              <TableCell className="w-1/3">
+                {(row?.subjects ?? []).map((subj) => subj.name).join(', ')}
+              </TableCell>
               <TableCell className="w-1/3">{row.createdAt}</TableCell>
               <TableCell className="flex gap-4">
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                  Editar
-                </button>
-                <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                <button
+                  onClick={() => deleteTeacher(row.id)}
+                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                >
                   Apagar
                 </button>
               </TableCell>

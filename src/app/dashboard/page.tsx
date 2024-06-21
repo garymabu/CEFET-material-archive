@@ -8,7 +8,6 @@ import TabButtonsContainer from './components/Layout/TabButtonsContainer';
 import ProfessorTable from './components/ProfessorTab/ProfessorTable';
 import ProfessorDialog from './components/ProfessorTab/ProfessorDialog';
 import AddNewButton from './components/Layout/AddNewButton';
-import Filter from './components/Layout/Filter';
 import StudentTable from './components/StudentTab/StudentTable';
 import StudentDialog from './components/StudentTab/StudentDialog';
 import SubjectTable from './components/SubjectTab/SubjectTable';
@@ -52,7 +51,6 @@ export default function Dashboard() {
       <section>
         {activeTab === Tab.FILE && (
           <div className="flex flex-col gap-8">
-            <Filter />
             <AddNewButton openDialog={openUploadDialog} />
             <MaterialTable openFeedbackDialog={openFeedbackDialog} />
             <MaterialUploadDialog
@@ -70,7 +68,6 @@ export default function Dashboard() {
         )}
         {activeTab === Tab.STUDENT && (
           <div className="flex flex-col gap-8">
-            <Filter />
             <AddNewButton openDialog={openStudentDialog} />
             <StudentTable openDialog={openStudentDialog} />
             <StudentDialog
@@ -81,7 +78,6 @@ export default function Dashboard() {
         )}
         {activeTab === Tab.PROFESSOR && (
           <div className="flex flex-col gap-8">
-            <Filter />
             <AddNewButton openDialog={openProfessorDialog} />
             <ProfessorTable openDialog={openProfessorDialog} />
             <ProfessorDialog
@@ -92,8 +88,7 @@ export default function Dashboard() {
         )}
         {activeTab === Tab.SUBJECT && (
           <div className="flex flex-col gap-8">
-            <Filter />
-            <AddNewButton openDialog={openProfessorDialog} />
+            <AddNewButton openDialog={openSubjectDialog} />
             <SubjectTable openDialog={openSubjectDialog} />
             <SubjectDialog
               isDialogOpen={isSubjectDialogOpen}

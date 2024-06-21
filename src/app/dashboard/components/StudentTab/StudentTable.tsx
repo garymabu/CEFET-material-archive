@@ -9,38 +9,33 @@ import TableHead from '@mui/material/TableHead';
 import Paper from '@mui/material/Paper';
 import TablePaginationActions from '../TablePaginationActions';
 import { useState, ChangeEvent, MouseEvent } from 'react';
-
-const rows = [
-  { name: 'Prova 1', classes: 'Matemática', createdAt: '2021-10-10' },
-  { name: 'Prova 2', classes: 'Português', createdAt: '2021-10-10' },
-  { name: 'Prova 3', classes: 'História', createdAt: '2021-10-10' },
-  { name: 'Prova 4', classes: 'Geografia', createdAt: '2021-10-10' },
-  { name: 'Prova 5', classes: 'Física', createdAt: '2021-10-10' },
-  { name: 'Prova 6', classes: 'Química', createdAt: '2021-10-10' },
-  { name: 'Prova 7', classes: 'Biologia', createdAt: '2021-10-10' },
-  { name: 'Prova 8', classes: 'Inglês', createdAt: '2021-10-10' },
-  { name: 'Prova 9', classes: 'Espanhol', createdAt: '2021-10-10' },
-  { name: 'Prova 10', classes: 'Artes', createdAt: '2021-10-10' },
-  { name: 'Prova 11', classes: 'Educação Física', createdAt: '2021-10-10' },
-  { name: 'Prova 12', classes: 'Filosofia', createdAt: '2021-10-10' },
-  { name: 'Prova 13', classes: 'Sociologia', createdAt: '2021-10-10' },
-  { name: 'Prova 14', classes: 'Ensino Religioso', createdAt: '2021-10-10' },
-  { name: 'Prova 15', classes: 'Língua Portuguesa', createdAt: '2021-10-10' },
-  { name: 'Prova 16', classes: 'Matemática', createdAt: '2021-10-10' },
-  { name: 'Prova 17', classes: 'Português', createdAt: '2021-10-10' },
-  { name: 'Prova 18', classes: 'História', createdAt: '2021-10-10' },
-  { name: 'Prova 19', classes: 'Geografia', createdAt: '2021-10-10' },
-];
+import { UserService } from '@/app/integration/cefet-material-archive/user/user.service';
+import { useAuthedQuery } from '@/app/hooks/useAuthedQuery.hook';
+import { User } from '@/app/entity/user.entity';
+import { useAuthedMutation } from '@/app/hooks/useAuthedMutation.hook';
 
 interface StudentTableProps {
   openDialog: () => void;
 }
 
-export default function StudentTable({
-  openDialog,
-}: StudentTableProps) {
+export default function StudentTable({ openDialog }: StudentTableProps) {
+  const userService = new UserService();
+  const { data, refetch: refreshStudents } = useAuthedQuery('materials', () =>
+    userService.getAllStudents()
+  );
+  const { mutate: deleteStudent } = useAuthedMutation(
+    (id: number) => userService.deleteStudent(id),
+    {
+      onSuccess: () => {
+        refreshStudents();
+      },
+    }
+  );
+
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const rows: User[] = data?.data ?? [];
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -75,14 +70,14 @@ export default function StudentTable({
             ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             : rows
           ).map((row) => (
-            <TableRow key={row.name} className="w-full">
-              <TableCell className="w-1/2">{row.name}</TableCell>
+            <TableRow key={row.displayName} className="w-full">
+              <TableCell className="w-1/2">{row.displayName}</TableCell>
               <TableCell className="w-1/2">{row.createdAt}</TableCell>
               <TableCell className="flex gap-4">
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                  Editar
-                </button>
-                <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                <button
+                  onClick={() => deleteStudent(row.id)}
+                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                >
                   Apagar
                 </button>
               </TableCell>
