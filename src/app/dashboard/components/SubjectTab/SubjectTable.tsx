@@ -59,6 +59,8 @@ export default function SubjectTable({ openDialog }: SubjectTableProps) {
 
   const rows: Subject[] = data?.data ?? [];
 
+  console.log('rows', rows);
+
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
@@ -94,7 +96,7 @@ export default function SubjectTable({ openDialog }: SubjectTableProps) {
           ).map((row) => (
             <TableRow key={row.name} className="w-full">
               <TableCell className="w-1/2">{row.name}</TableCell>
-              <TableCell className="w-1/2">{row.createdAt}</TableCell>
+              <TableCell className="w-1/2">{row.createdAt.toISOString()}</TableCell>
               <TableCell className="flex gap-4">
                 <button
                   onClick={() => {
@@ -119,7 +121,6 @@ export default function SubjectTable({ openDialog }: SubjectTableProps) {
               rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
               colSpan={3}
               count={rows?.length}
-              // count={0}
               rowsPerPage={rowsPerPage}
               page={page}
               slotProps={{
