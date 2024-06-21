@@ -1,19 +1,19 @@
-'use client'
+'use client';
 
-import { useState } from "react";
-import Filter from "./components/Filter";
-import MaterialTable from "./components/MaterialTable";
-import FeedbackModal from "./components/FeedbackDialog";
-import MaterialUploadDialog from "./components/MaterialUploadDialog";
+import { useState } from 'react';
+import Filter from './components/Filter';
+import MaterialTable from './components/MaterialTable';
+import FeedbackModal from './components/FeedbackDialog';
+import MaterialUploadDialog from './components/MaterialUploadDialog';
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState('tab1');
   const [isFeedBackDialogOpen, setIsFeedBackDialogOpen] = useState(false);
-  
+
   const openFeedbackDialog = () => {
     setIsFeedBackDialogOpen(true);
   };
-  
+
   const closeFeedbackDialog = () => {
     setIsFeedBackDialogOpen(false);
   };
@@ -28,8 +28,6 @@ export default function Dashboard() {
     setIsUploadDialogOpen(false);
   };
 
-  
-
   return (
     <main className="p-12">
       <div className="flex space-x-4 mb-4">
@@ -40,24 +38,23 @@ export default function Dashboard() {
         >
           Provas e Materiais de Aula
         </button>
-        <button 
+        <button
           style={{ textDecorationThickness: '2px', textUnderlineOffset: '6px' }}
-          className={`bg-transparent py-2 px-4 ${activeTab === 'tab2' ? 'text-indigo-400 underline' : 'bg-gray-200'}`} 
+          className={`bg-transparent py-2 px-4 ${activeTab === 'tab2' ? 'text-indigo-400 underline' : 'bg-gray-200'}`}
           onClick={() => setActiveTab('tab2')}
         >
           Alunos
         </button>
-        <button 
+        <button
           style={{ textDecorationThickness: '2px', textUnderlineOffset: '6px' }}
-          className={`bg-transparent py-2 px-4 ${activeTab === 'tab3' ? 'text-indigo-400 underline' : 'bg-gray-200'}`} 
+          className={`bg-transparent py-2 px-4 ${activeTab === 'tab3' ? 'text-indigo-400 underline' : 'bg-gray-200'}`}
           onClick={() => setActiveTab('tab3')}
         >
           Professores
         </button>
       </div>
       <div>
-        {
-          activeTab === 'tab1' && 
+        {activeTab === 'tab1' && (
           <div className="flex flex-col gap-8">
             <Filter />
             <button
@@ -66,9 +63,7 @@ export default function Dashboard() {
             >
               Adicionar novo
             </button>
-            <MaterialTable
-              openFeedbackDialog={openFeedbackDialog}
-            />
+            <MaterialTable openFeedbackDialog={openFeedbackDialog} />
             <MaterialUploadDialog
               isUploadDialogOpen={isUploadDialogOpen}
               closeUploadDialog={closeUploadDialog}
@@ -78,21 +73,19 @@ export default function Dashboard() {
               closeFeedbackDialog={closeFeedbackDialog}
             />
           </div>
-        }
-        {
-          activeTab === 'tab2' && 
+        )}
+        {activeTab === 'tab2' && (
           <div className="flex flex-col gap-8">
             {/* <Filter />
             <MaterialTable /> */}
           </div>
-        }
-        {
-          activeTab === 'tab3' && 
+        )}
+        {activeTab === 'tab3' && (
           <div className="flex flex-col gap-8">
             {/* <Filter />
             <MaterialTable /> */}
           </div>
-        }
+        )}
       </div>
     </main>
   );

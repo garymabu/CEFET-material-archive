@@ -1,4 +1,4 @@
-import HoverRating from "./HoverRating";
+import HoverRating from './HoverRating';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -11,7 +11,10 @@ interface FeedbackDialogProps {
   closeFeedbackDialog: () => void;
 }
 
-export default function FeedbackDialog({ isFeedBackDialogOpen, closeFeedbackDialog }: FeedbackDialogProps) {
+export default function FeedbackDialog({
+  isFeedBackDialogOpen,
+  closeFeedbackDialog,
+}: FeedbackDialogProps) {
   return (
     <Dialog
       open={isFeedBackDialogOpen}
@@ -21,9 +24,7 @@ export default function FeedbackDialog({ isFeedBackDialogOpen, closeFeedbackDial
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <DialogTitle id="alert-dialog-title">
-        Nome do material
-      </DialogTitle>
+      <DialogTitle id="alert-dialog-title">Nome do material</DialogTitle>
       <DialogContent className="flex justify-center">
         <HoverRating />
       </DialogContent>

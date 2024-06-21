@@ -1,9 +1,8 @@
-'use client'
+'use client';
 
 import Image from 'next/image';
 
 export default function NavBar() {
-
   function handleLogout() {
     console.log('Logout');
   }
@@ -15,15 +14,10 @@ export default function NavBar() {
           <button className="rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:ml-3 sm:w-auto sm:text-sm bg-gray-500 text-white">
             Nome do Usuário
           </button>
-          <Image
-            src="/horiz_azul.png"
-            alt="Logo"
-            width={200}
-            height={200}
-          />
+          <Image src="/horiz_azul.png" alt="Logo" width={200} height={200} />
         </div>
         <div className="flex flex-row items-center">
-          <button 
+          <button
             className="rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm bg-red-500 text-white"
             onClick={handleLogout}
           >
