@@ -1,68 +1,57 @@
 'use client';
 
 import { useState } from 'react';
-import Filter from './components/Filter';
-import MaterialTable from './components/MaterialTable';
-import FeedbackModal from './components/FeedbackDialog';
-import MaterialUploadDialog from './components/MaterialUploadDialog';
+import MaterialTable from './components/MaterialTab/MaterialTable';
+import FeedbackModal from './components/MaterialTab/FeedbackDialog';
+import MaterialUploadDialog from './components/MaterialTab/MaterialUploadDialog';
+import TabButtonsContainer from './components/Layout/TabButtonsContainer';
+import ProfessorTable from './components/ProfessorTab/ProfessorTable';
+import ProfessorDialog from './components/ProfessorTab/ProfessorDialog';
+import AddNewButton from './components/Layout/AddNewButton';
+import Filter from './components/Layout/Filter';
+import StudentTable from './components/StudentTab/StudentTable';
+import StudentDialog from './components/StudentTab/StudentDialog';
+import SubjectTable from './components/SubjectTab/SubjectTable';
+import SubjectDialog from './components/SubjectTab/SubjectDialog';
+
+export enum Tab {
+  FILE = 'FILE',
+  STUDENT = 'STUDENT',
+  PROFESSOR = 'PROFESSOR',
+  SUBJECT = 'SUBJECT',
+}
 
 export default function Dashboard() {
-  const [activeTab, setActiveTab] = useState('tab1');
+  const [activeTab, setActiveTab] = useState<Tab>(Tab.FILE);
+  
   const [isFeedBackDialogOpen, setIsFeedBackDialogOpen] = useState(false);
-
-  const openFeedbackDialog = () => {
-    setIsFeedBackDialogOpen(true);
-  };
-
-  const closeFeedbackDialog = () => {
-    setIsFeedBackDialogOpen(false);
-  };
-
+  const openFeedbackDialog = () => setIsFeedBackDialogOpen(true);
+  const closeFeedbackDialog = () => setIsFeedBackDialogOpen(false);
+  
   const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
-
-  const openUploadDialog = () => {
-    setIsUploadDialogOpen(true);
-  };
-
-  const closeUploadDialog = () => {
-    setIsUploadDialogOpen(false);
-  };
+  const openUploadDialog = () => setIsUploadDialogOpen(true);
+  const closeUploadDialog = () => setIsUploadDialogOpen(false);
+  
+  const [isProfessorDialogOpen, setIsProfessorDialogOpen] = useState(false);
+  const openProfessorDialog = () => setIsProfessorDialogOpen(true);
+  const closeProfessorDialog = () => setIsProfessorDialogOpen(false);
+  
+  const [isStudentDialogOpen, setIsStudentDialogOpen] = useState(false);
+  const openStudentDialog = () => setIsStudentDialogOpen(true);
+  const closeStudentDialog = () => setIsStudentDialogOpen(false);
+  
+  const [isSubjectDialogOpen, setIsSubjectDialogOpen] = useState(false);
+  const openSubjectDialog = () => setIsSubjectDialogOpen(true);
+  const closeSubjectDialog = () => setIsSubjectDialogOpen(false);
 
   return (
     <main className="p-12">
-      <div className="flex space-x-4 mb-4">
-        <button
-          style={{ textDecorationThickness: '2px', textUnderlineOffset: '6px' }}
-          className={`bg-transparent py-2 px-4 ${activeTab === 'tab1' ? 'text-indigo-400 underline' : 'bg-gray-200'}`}
-          onClick={() => setActiveTab('tab1')}
-        >
-          Provas e Materiais de Aula
-        </button>
-        <button
-          style={{ textDecorationThickness: '2px', textUnderlineOffset: '6px' }}
-          className={`bg-transparent py-2 px-4 ${activeTab === 'tab2' ? 'text-indigo-400 underline' : 'bg-gray-200'}`}
-          onClick={() => setActiveTab('tab2')}
-        >
-          Alunos
-        </button>
-        <button
-          style={{ textDecorationThickness: '2px', textUnderlineOffset: '6px' }}
-          className={`bg-transparent py-2 px-4 ${activeTab === 'tab3' ? 'text-indigo-400 underline' : 'bg-gray-200'}`}
-          onClick={() => setActiveTab('tab3')}
-        >
-          Professores
-        </button>
-      </div>
-      <div>
-        {activeTab === 'tab1' && (
+      <TabButtonsContainer activeTab={activeTab} setActiveTab={setActiveTab} />
+      <section>
+        {activeTab === Tab.FILE && (
           <div className="flex flex-col gap-8">
             <Filter />
-            <button
-              onClick={openUploadDialog}
-              className="self-end w-fit py-2 px-4 rounded bg-indigo-500 hover:bg-indigo-700 text-white font-bold"
-            >
-              Adicionar novo
-            </button>
+            <AddNewButton openDialog={openUploadDialog} />
             <MaterialTable openFeedbackDialog={openFeedbackDialog} />
             <MaterialUploadDialog
               isUploadDialogOpen={isUploadDialogOpen}
@@ -74,19 +63,44 @@ export default function Dashboard() {
             />
           </div>
         )}
-        {activeTab === 'tab2' && (
+        {activeTab === Tab.STUDENT && (
           <div className="flex flex-col gap-8">
-            {/* <Filter />
-            <MaterialTable /> */}
+            <Filter />
+            <AddNewButton openDialog={openStudentDialog} />
+            <StudentTable openDialog={openStudentDialog}/>
+            <StudentDialog
+              isDialogOpen={isStudentDialogOpen}
+              closeDialog={closeStudentDialog}
+            />
           </div>
         )}
-        {activeTab === 'tab3' && (
+        {activeTab === Tab.PROFESSOR && (
           <div className="flex flex-col gap-8">
-            {/* <Filter />
-            <MaterialTable /> */}
+            <Filter />
+            <AddNewButton openDialog={openProfessorDialog} />
+            <ProfessorTable
+              openDialog={openProfessorDialog}
+            />
+            <ProfessorDialog
+              isDialogOpen={isProfessorDialogOpen}
+              closeDialog={closeProfessorDialog}
+            />
           </div>
         )}
-      </div>
+        {activeTab === Tab.SUBJECT && (
+          <div className="flex flex-col gap-8">
+            <Filter />
+            <AddNewButton openDialog={openProfessorDialog} />
+            <SubjectTable 
+              openDialog={openSubjectDialog}
+            />
+            <SubjectDialog
+              isDialogOpen={isSubjectDialogOpen}
+              closeDialog={closeSubjectDialog}
+            />
+          </div>
+        )}
+      </section>
     </main>
   );
 }

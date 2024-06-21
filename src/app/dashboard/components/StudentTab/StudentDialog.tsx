@@ -1,4 +1,4 @@
-import HoverRating from './HoverRating';
+import { useState } from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -6,19 +6,21 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 
-interface MaterialUploadDialogProps {
-  isUploadDialogOpen: boolean;
-  closeUploadDialog: () => void;
+interface StudentDialogProps {
+  isDialogOpen: boolean;
+  closeDialog: () => void;
 }
 
-export default function MaterialUploadDialog({
-  isUploadDialogOpen,
-  closeUploadDialog,
-}: MaterialUploadDialogProps) {
+export default function StudentDialog({
+  isDialogOpen,
+  closeDialog,
+}: StudentDialogProps) {
   return (
     <Dialog
-      open={isUploadDialogOpen}
-      onClose={closeUploadDialog}
+      open={isDialogOpen}
+      onClose={closeDialog}
+      maxWidth="sm"
+      fullWidth
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
@@ -26,9 +28,8 @@ export default function MaterialUploadDialog({
       <DialogContent>
         <TextField
           autoFocus
-          required
           margin="normal"
-          label="Nome do material"
+          label="Nome"
           type="text"
           fullWidth
           variant="outlined"
@@ -37,20 +38,16 @@ export default function MaterialUploadDialog({
       <DialogContent>
         <TextField
           autoFocus
-          required
           margin="normal"
-          label="Disciplina"
-          type="text"
+          label="Email"
+          type="email"
           fullWidth
           variant="outlined"
         />
       </DialogContent>
-      <DialogContent>
-        <TextField autoFocus required id="discipline" type="file" fullWidth />
-      </DialogContent>
       <DialogActions>
-        <Button onClick={closeUploadDialog}>Fechar</Button>
-        <Button onClick={closeUploadDialog}>Confirmar</Button>
+        <Button onClick={closeDialog}>Fechar</Button>
+        <Button onClick={closeDialog}>Confirmar</Button>
       </DialogActions>
     </Dialog>
   );

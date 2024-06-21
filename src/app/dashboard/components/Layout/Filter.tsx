@@ -1,7 +1,9 @@
 import { useForm } from 'react-hook-form';
+import SubjectSelector from '../ProfessorTab/SubjectSelector';
 
 interface MaterialSeachInfo {
   name: string;
+  createdAt: Date;
 }
 
 export default function Filter() {
@@ -17,13 +19,23 @@ export default function Filter() {
       className="flex flex-col justify-center items-start p-4 border border-solid rounded-md"
       onSubmit={handleSubmit(handleSearch)}
     >
-      <div className="flex flex-col justify-center items-start">
-        <label className="text-sm">Nome</label>
-        <input
-          className="w-44 p-1 border border-gray-300 rounded-sm"
-          type="text"
-          {...register('name', { required: true })}
-        />
+      <div className="flex justify-center items-start gap-8">
+        <div className="flex flex-col justify-center items-start">
+          <label className="text-sm">Nome</label>
+          <input
+            className="w-44 p-1 border border-gray-300 rounded-sm"
+            type="text"
+            {...register('name')}
+          />
+        </div>
+        <div className="flex flex-col justify-center items-start">
+          <label className="text-sm">Data de entrada</label>
+          <input
+            className="w-44 p-1 border border-gray-300 rounded-sm"  
+            type="date"
+            {...register('createdAt')}
+          />
+        </div>
       </div>
       <button
         type="submit"
