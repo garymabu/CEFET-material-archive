@@ -25,7 +25,13 @@ export default function ProfessorDialog({
   closeDialog,
 }: ProfessorDialogProps) {
   const [subject, setSubject] = useState('');
-  const [professorSubjects, setProfessorSubjects] = useState<ProfessorSubjects[]>([{id: 1, name: 'Matemática'}, {id: 2, name: 'Português'}, {id: 3, name: 'História'}]);
+  const [professorSubjects, setProfessorSubjects] = useState<
+    ProfessorSubjects[]
+  >([
+    { id: 1, name: 'Matemática' },
+    { id: 2, name: 'Português' },
+    { id: 3, name: 'História' },
+  ]);
   return (
     <Dialog
       open={isDialogOpen}
@@ -44,7 +50,6 @@ export default function ProfessorDialog({
           type="text"
           fullWidth
           variant="outlined"
-
         />
       </DialogContent>
       <DialogContent>
@@ -65,10 +70,7 @@ export default function ProfessorDialog({
         </TableBody>
       </DialogContent>
       <DialogContent>
-        <SubjectSelector
-          subject={subject}
-          setSubject={setSubject}
-        />
+        <SubjectSelector subject={subject} setSubject={setSubject} />
       </DialogContent>
       <DialogContent>
         <TextField

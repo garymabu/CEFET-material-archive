@@ -12,17 +12,26 @@ import { useState, ChangeEvent, MouseEvent } from 'react';
 import { Material } from '@/app/entity/material.entity';
 import { useAuthedQuery } from '@/app/hooks/useAuthedQuery.hook';
 import { MaterialService } from '@/app/integration/cefet-material-archive/material/material.service';
+import { useAuthedMutation } from '@/app/hooks/useAuthedMutation.hook';
 
 interface MaterialTableProps {
-  openFeedbackDialog: () => void;
+  openFeedbackDialog: (material: Material) => void;
 }
 
 export default function MaterialTable({
   openFeedbackDialog,
 }: MaterialTableProps) {
   const materialService = new MaterialService();
-  const { data } = useAuthedQuery('materials', () =>
+  const { data, refetch: refreshMaterials } = useAuthedQuery('materials', () =>
     materialService.getAllMaterials()
+  );
+  const { mutate: deleteMaterial } = useAuthedMutation(
+    (id: number) => materialService.deleteMaterial(id),
+    {
+      onSuccess: () => {
+        refreshMaterials();
+      },
+    }
   );
 
   const [page, setPage] = useState(0);
@@ -72,14 +81,21 @@ export default function MaterialTable({
               <TableCell className="flex gap-4">
                 <button
                   className="bg-transparent text-purple-400 border border-solid border-purple-400 font-bold py-2 px-4 rounded"
-                  onClick={openFeedbackDialog}
+                  onClick={() => {
+                    openFeedbackDialog(row);
+                  }}
                 >
                   Visualizar
                 </button>
                 <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                   Editar
                 </button>
-                <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                <button
+                  onClick={() => {
+                    deleteMaterial(row.id);
+                  }}
+                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                >
                   Apagar
                 </button>
               </TableCell>

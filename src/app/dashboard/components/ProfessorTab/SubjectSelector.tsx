@@ -6,7 +6,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { useState } from 'react';
 
 interface Subject {
-  name: string
+  name: string;
 }
 
 interface SubjectSelectorProps {
@@ -14,7 +14,10 @@ interface SubjectSelectorProps {
   setSubject: (subject: string) => void;
 }
 
-export default function SubjectSelector({ subject, setSubject }: SubjectSelectorProps) {
+export default function SubjectSelector({
+  subject,
+  setSubject,
+}: SubjectSelectorProps) {
   const [classes, setClasses] = useState<Subject[]>([]);
 
   const handleChange = (event: SelectChangeEvent) => {
@@ -33,7 +36,9 @@ export default function SubjectSelector({ subject, setSubject }: SubjectSelector
           onChange={handleChange}
         >
           {classes.map((subject) => (
-            <MenuItem value={subject.name}>{subject.name}</MenuItem>
+            <MenuItem key={subject.name} value={subject.name}>
+              {subject.name}
+            </MenuItem>
           ))}
         </Select>
       </FormControl>

@@ -36,9 +36,7 @@ interface ProfessorTableProps {
   openDialog: () => void;
 }
 
-export default function ProfessorTable({
-  openDialog,
-}: ProfessorTableProps) {
+export default function ProfessorTable({ openDialog }: ProfessorTableProps) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 

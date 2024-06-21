@@ -13,6 +13,7 @@ import StudentTable from './components/StudentTab/StudentTable';
 import StudentDialog from './components/StudentTab/StudentDialog';
 import SubjectTable from './components/SubjectTab/SubjectTable';
 import SubjectDialog from './components/SubjectTab/SubjectDialog';
+import { Material } from '../entity/material.entity';
 
 export enum Tab {
   FILE = 'FILE',
@@ -23,10 +24,11 @@ export enum Tab {
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState<Tab>(Tab.FILE);
+  const [selectedMaterial, setSelectedMaterial] = useState<Material>();
 
-  const [isFeedBackDialogOpen, setIsFeedBackDialogOpen] = useState(false);
-  const openFeedbackDialog = () => setIsFeedBackDialogOpen(true);
-  const closeFeedbackDialog = () => setIsFeedBackDialogOpen(false);
+  const openFeedbackDialog = (material: Material) =>
+    setSelectedMaterial(material);
+  const closeFeedbackDialog = () => setSelectedMaterial(undefined);
 
   const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
   const openUploadDialog = () => setIsUploadDialogOpen(true);
@@ -57,10 +59,13 @@ export default function Dashboard() {
               isUploadDialogOpen={isUploadDialogOpen}
               closeUploadDialog={closeUploadDialog}
             />
-            <FeedbackModal
-              isFeedBackDialogOpen={isFeedBackDialogOpen}
-              closeFeedbackDialog={closeFeedbackDialog}
-            />
+            {selectedMaterial && (
+              <FeedbackModal
+                material={selectedMaterial}
+                isFeedBackDialogOpen={!!selectedMaterial}
+                closeFeedbackDialog={closeFeedbackDialog}
+              />
+            )}
           </div>
         )}
         {activeTab === Tab.STUDENT && (

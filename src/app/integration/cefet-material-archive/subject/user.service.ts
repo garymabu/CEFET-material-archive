@@ -1,10 +1,11 @@
 import { AxiosInstance } from 'axios';
 import client from '../../axios/axios.client';
+import { Subject } from '@/app/entity/subject.entity';
 
-export class UserService {
+export class SubjectService {
   constructor(private readonly httpClient: AxiosInstance = client) {}
 
-  async getAllUsers() {
-    return this.httpClient.get('/user');
+  async getAll() {
+    return this.httpClient.get<Subject[]>('/subject');
   }
 }
