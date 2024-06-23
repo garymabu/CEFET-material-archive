@@ -28,7 +28,8 @@ export default function FeedbackDialog({
       aria-describedby="alert-dialog-description"
     >
       <DialogTitle id="alert-dialog-title">{material?.description}</DialogTitle>
-      <DialogContent className="flex justify-center">
+      <DialogContent className="flex justify-center items-center flex-col">
+        <HoverRating />
         <a href={material?.dataUrl} target="_blank" rel="noreferrer">
           <Button variant="contained" color="primary">
             Visualizar

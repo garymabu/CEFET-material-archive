@@ -30,6 +30,7 @@ export default function HoverRating() {
         width: 200,
         display: 'flex',
         alignItems: 'center',
+        marginBottom: '1rem',
       }}
     >
       <Rating

@@ -9,12 +9,12 @@ import { useEffect, useState } from 'react';
 import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
-import { useAuthedQuery } from '@/app/hooks/useAuthedQuery.hook';
+import { useAuthedEffectfullQuery } from '@/app/hooks/useAuthedEffectfullQuery.hook';
 import { TeacherService } from '@/app/integration/cefet-material-archive/teacher/teacher.service';
 import { SubjectService } from '@/app/integration/cefet-material-archive/subject/user.service';
 import { MenuItem, Select } from '@mui/material';
 import { useForm } from 'react-hook-form';
-import { useAuthedMutation } from '@/app/hooks/useAuthedMutation.hook';
+import { useAuthedEffectfullMutation } from '@/app/hooks/useAuthedEffectfullMutation.hook';
 
 interface ProfessorSubjects {
   id: number;
@@ -31,16 +31,15 @@ export default function ProfessorDialog({
   closeDialog,
 }: ProfessorDialogProps) {
   const teacherService = new TeacherService();
-  const { mutate, isSuccess } = useAuthedMutation(
+  const { mutate, isSuccess } = useAuthedEffectfullMutation(
     (data: { name: string; email: string }) =>
-      teacherService.createTeacher(data),
+      teacherService.createTeacher(data)
   );
 
-  useEffect(()=>{
-    if(isSuccess)
-      closeDialog();
-  }, [isSuccess, closeDialog])
-  
+  useEffect(() => {
+    if (isSuccess) closeDialog();
+  }, [isSuccess, closeDialog]);
+
   const { register, handleSubmit } = useForm({
     defaultValues: {
       name: '',

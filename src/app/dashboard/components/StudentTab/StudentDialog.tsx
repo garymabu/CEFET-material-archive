@@ -5,7 +5,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
-import { useAuthedMutation } from '@/app/hooks/useAuthedMutation.hook';
+import { useAuthedEffectfullMutation } from '@/app/hooks/useAuthedEffectfullMutation.hook';
 import {
   CreateUserDto,
   UserService,
@@ -23,12 +23,12 @@ export default function StudentDialog({
   closeDialog,
 }: StudentDialogProps) {
   const userService = new UserService();
-  const { mutate: createStudent } = useAuthedMutation(
+  const { mutate: createStudent } = useAuthedEffectfullMutation(
     (student: CreateUserDto) => userService.createUser(student),
     {
       onSuccess: () => {
         closeDialog();
-      }
+      },
     }
   );
   const { register, handleSubmit } = useForm({

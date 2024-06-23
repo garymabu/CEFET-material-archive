@@ -11,13 +11,13 @@ export interface CreateMaterialDto {
 export class MaterialService {
   constructor(private readonly httpClient: AxiosInstance = client) {}
 
-  async getAllMaterials() {
+  async getAll() {
     return this.httpClient.get<Material[]>('/material');
   }
-  async createMaterial(material: CreateMaterialDto) {
+  async create(material: CreateMaterialDto) {
     return this.httpClient.post('/material', material);
   }
-  async deleteMaterial(materialId: number) {
+  async delete(materialId: number) {
     return this.httpClient.delete(`/material/${materialId}`);
   }
 }

@@ -2,7 +2,7 @@
 
 import { useForm } from 'react-hook-form';
 import { PasswordResetStageProps } from '../page';
-import { useAuthedMutation } from '@/app/hooks/useAuthedMutation.hook';
+import { useAuthedEffectfullMutation } from '@/app/hooks/useAuthedEffectfullMutation.hook';
 import { UserService } from '@/app/integration/cefet-material-archive/user/user.service';
 import { AuthStorage } from '@/app/storage/auth.storage';
 
@@ -16,7 +16,7 @@ export default function ResetPasswordForm({
     isError,
     error,
     isSuccess,
-  } = useAuthedMutation(
+  } = useAuthedEffectfullMutation(
     (newPassword: string) =>
       userService.changePassword(AuthStorage.get().userId, newPassword),
     {

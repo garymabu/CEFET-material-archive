@@ -21,6 +21,7 @@ export class UserService {
 
   async getCurrentUser() {
     const userId = AuthStorage.get().userId;
+    console.log('getting current user', userId);
     return this.httpClient.get<User>(`/user/${userId}`);
   }
 

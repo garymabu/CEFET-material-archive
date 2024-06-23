@@ -8,8 +8,9 @@ import {
   useQuery,
 } from 'react-query';
 import { redirectRoute } from './authHooks.constants';
+import { useEffect } from 'react';
 
-export const useAuthedQuery = <
+export const useAuthedEffectfullQuery = <
   TQueryFnData = unknown,
   TError = unknown,
   TData = TQueryFnData,
@@ -24,8 +25,10 @@ export const useAuthedQuery = <
 ) => {
   const router = useRouter();
   const query = useQuery(queryKey, queryFn, options);
-  if (query?.error?.response?.status === 401) {
-    router.push(redirectRoute);
-  }
+  useEffect(() => {
+    if (query?.error?.response?.status === 401) {
+      router.push(redirectRoute);
+    }
+  }, [query.error, router]);
   return query;
 };

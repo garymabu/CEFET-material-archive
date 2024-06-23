@@ -7,9 +7,9 @@ import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import { useForm } from 'react-hook-form';
 import { SubjectService } from '@/app/integration/cefet-material-archive/subject/user.service';
-import { useAuthedMutation } from '@/app/hooks/useAuthedMutation.hook';
+import { useAuthedEffectfullMutation } from '@/app/hooks/useAuthedEffectfullMutation.hook';
 import { TeacherService } from '@/app/integration/cefet-material-archive/teacher/teacher.service';
-import { useAuthedQuery } from '@/app/hooks/useAuthedQuery.hook';
+import { useAuthedEffectfullQuery } from '@/app/hooks/useAuthedEffectfullQuery.hook';
 import { MenuItem, Select } from '@mui/material';
 import { Teacher } from '@/app/entity/teacher.entity';
 
@@ -24,31 +24,32 @@ export default function SubjectDialog({
 }: SubjectDialogProps) {
   const subjectService = new SubjectService();
   const teacherService = new TeacherService();
-  const {
-    mutate,
-  } = useAuthedMutation(
-    ({teacherId,name,term}: {term:number, teacherId:number, name: string}) => subjectService.createSubject(
-      {
+  const { mutate } = useAuthedEffectfullMutation(
+    ({
+      teacherId,
+      name,
+      term,
+    }: {
+      term: number;
+      teacherId: number;
+      name: string;
+    }) =>
+      subjectService.createSubject({
         name,
         teacherId,
         term,
-      }
-    ),
+      }),
     {
       onSuccess: () => {
-        closeDialog()
-      }
+        closeDialog();
+      },
     }
   );
-  const {
-    data: allTeachers,
-  } = useAuthedQuery(
-    'teachers',
-    () => 
-      teacherService.getAllTeachers()
-  )
+  const { data: allTeachers } = useAuthedEffectfullQuery('teachers', () =>
+    teacherService.getAll()
+  );
 
-  const allTeachersData : Teacher[] = allTeachers?.data || [];
+  const allTeachersData: Teacher[] = allTeachers?.data || [];
   const { register, handleSubmit } = useForm({
     defaultValues: {
       name: '',
@@ -65,9 +66,11 @@ export default function SubjectDialog({
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <form onSubmit={handleSubmit((vals) => {
-        mutate(vals);
-      })}>
+      <form
+        onSubmit={handleSubmit((vals) => {
+          mutate(vals);
+        })}
+      >
         <DialogTitle id="alert-dialog-title">Nova Disciplina</DialogTitle>
         <DialogContent>
           <TextField
@@ -81,7 +84,7 @@ export default function SubjectDialog({
           />
         </DialogContent>
         <DialogContent>
-        <Select
+          <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             label="Age"
@@ -108,7 +111,7 @@ export default function SubjectDialog({
         </DialogContent>
         <DialogActions>
           <Button onClick={closeDialog}>Fechar</Button>
-          <Button type='submit'>Confirmar</Button>
+          <Button type="submit">Confirmar</Button>
         </DialogActions>
       </form>
     </Dialog>

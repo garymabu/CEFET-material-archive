@@ -10,37 +10,33 @@ import Paper from '@mui/material/Paper';
 import TablePaginationActions from '../TablePaginationActions';
 import { useState, ChangeEvent, MouseEvent, useEffect } from 'react';
 import { UserService } from '@/app/integration/cefet-material-archive/user/user.service';
-import { useAuthedQuery } from '@/app/hooks/useAuthedQuery.hook';
+
 import { User } from '@/app/entity/user.entity';
-import { useAuthedMutation } from '@/app/hooks/useAuthedMutation.hook';
+import { useAuthedEffectfullMutation } from '@/app/hooks/useAuthedEffectfullMutation.hook';
 
 interface StudentTableProps {
-  openDialog: () => void;
-  isModalOpen: boolean;
+  data?: User[];
+  onDelete: () => void;
 }
 
-export default function StudentTable({ openDialog, isModalOpen }: StudentTableProps) {
+export default function StudentTable({ data, onDelete }: StudentTableProps) {
   const userService = new UserService();
-  const { data, refetch: refreshStudents } = useAuthedQuery('materials', () =>
-    userService.getAllStudents()
-  );
-  const { mutate: deleteStudent } = useAuthedMutation(
+  // const { data, refetch: refreshStudents } = useAuthedEffectfullQuery(
+  //   'students',
+  //   () => userService.getAllStudents()
+  // );
+  const { mutate: deleteStudent } = useAuthedEffectfullMutation(
     (id: number) => userService.deleteStudent(id),
     {
       onSuccess: () => {
-        refreshStudents();
+        onDelete();
       },
     }
   );
-
-  useEffect(() => {
-    refreshStudents();
-  }, [refreshStudents, isModalOpen])
-
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const rows: User[] = data?.data ?? [];
+  const rows: User[] = data ?? [];
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =

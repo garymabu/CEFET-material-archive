@@ -10,47 +10,38 @@ import Paper from '@mui/material/Paper';
 import TablePaginationActions from '../TablePaginationActions';
 import { useState, ChangeEvent, MouseEvent, useEffect } from 'react';
 import { Material } from '@/app/entity/material.entity';
-import { useAuthedQuery } from '@/app/hooks/useAuthedQuery.hook';
 import { MaterialService } from '@/app/integration/cefet-material-archive/material/material.service';
-import { useAuthedMutation } from '@/app/hooks/useAuthedMutation.hook';
+import { useAuthedEffectfullMutation } from '@/app/hooks/useAuthedEffectfullMutation.hook';
 
 interface MaterialTableProps {
-  openFeedbackDialog: (material: Material) => void;
-  isModalOpen: boolean,
+  onSelectFeedbackDialog: (material: Material) => void;
+  data?: Material[];
+  onDelete: () => void;
 }
 
 export default function MaterialTable({
-  openFeedbackDialog,
-  isModalOpen,
+  onSelectFeedbackDialog: openFeedbackDialog,
+  data,
+  onDelete,
 }: MaterialTableProps) {
   const materialService = new MaterialService();
-  const { data, refetch: refreshMaterials } = useAuthedQuery('materials', () =>
-    materialService.getAllMaterials()
-  );
-  const { mutate: deleteMaterial } = useAuthedMutation(
-    (id: number) => materialService.deleteMaterial(id),
+  const { mutate: deleteMaterial } = useAuthedEffectfullMutation(
+    (id: number) => materialService.delete(id),
     {
       onSuccess: () => {
-        refreshMaterials();
+        onDelete();
       },
     }
   );
 
-  useEffect(() => {
-    refreshMaterials();
-  }, [isModalOpen])
-
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const rows: Material[] = data?.data ?? [];
-
-  console.log('rows', rows);
+  const rows: Material[] = data ?? [];
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
-  // page > 0 ? Math.max(0, (1 + page) * rowsPerPage - 0) : 0;
 
   const handleChangePage = (
     event: MouseEvent<HTMLButtonElement> | null,

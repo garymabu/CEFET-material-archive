@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 import { Inter } from 'next/font/google';
 import NavBar from '../components/NavBar';
 import { UserService } from '../integration/cefet-material-archive/user/user.service';
-import { useAuthedQuery } from '../hooks/useAuthedQuery.hook';
+import { useAuthedEffectfullQuery } from '../hooks/useAuthedEffectfullQuery.hook';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -13,12 +13,8 @@ export default function DashboardLayout({
   children: ReactNode;
 }>) {
   const userService = new UserService();
-  const { data: userData } = useAuthedQuery(
-    'user',
-    () => userService.getCurrentUser(),
-    {
-      enabled: true,
-    }
+  const { data: userData } = useAuthedEffectfullQuery('user', () =>
+    userService.getCurrentUser()
   );
 
   return (

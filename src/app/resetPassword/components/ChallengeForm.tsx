@@ -4,7 +4,7 @@ import {
 } from '@/app/integration/cefet-material-archive/auth/auth.service';
 import { useForm } from 'react-hook-form';
 import { PasswordResetStageProps } from '../page';
-import { useAuthedMutation } from '@/app/hooks/useAuthedMutation.hook';
+import { useAuthedEffectfullMutation } from '@/app/hooks/useAuthedEffectfullMutation.hook';
 
 export default function ChallengeForm({
   moveToNextStage,
@@ -21,7 +21,7 @@ export default function ChallengeForm({
     isError,
     error,
     isSuccess,
-  } = useAuthedMutation(
+  } = useAuthedEffectfullMutation(
     (email: string) => authService.applyChallengeResults(userId ?? '', email),
     {
       onSuccess: ({ data }) => {

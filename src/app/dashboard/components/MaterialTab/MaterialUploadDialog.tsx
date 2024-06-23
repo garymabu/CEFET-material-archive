@@ -1,6 +1,6 @@
 import { Material } from '@/app/entity/material.entity';
-import { useAuthedMutation } from '@/app/hooks/useAuthedMutation.hook';
-import { useAuthedQuery } from '@/app/hooks/useAuthedQuery.hook';
+import { useAuthedEffectfullMutation } from '@/app/hooks/useAuthedEffectfullMutation.hook';
+import { useAuthedEffectfullQuery } from '@/app/hooks/useAuthedEffectfullQuery.hook';
 import { FileService } from '@/app/integration/cefet-material-archive/file/file.service';
 import {
   CreateMaterialDto,
@@ -39,20 +39,25 @@ export default function MaterialUploadDialog({
     mutate: uploadFile,
     isSuccess: uploadSuccess,
     data: uploadData,
-  } = useAuthedMutation((file: File) => fileService.uploadFile(file), {
-    onSuccess: ({ data }) => {
-      createMaterial({
-        description: newMaterial?.description ?? '',
-        subjectId: newMaterial?.subjectId ?? -1,
-        dataUrl: data.url,
-      });
-    },
-  });
+  } = useAuthedEffectfullMutation(
+    (file: File) => fileService.uploadFile(file),
+    {
+      onSuccess: ({ data }) => {
+        createMaterial({
+          description: newMaterial?.description ?? '',
+          subjectId: newMaterial?.subjectId ?? -1,
+          dataUrl: data.url,
+        });
+      },
+    }
+  );
   const { mutate: createMaterial, isSuccess: successfullCreateMaterial } =
-    useAuthedMutation((newMaterial: CreateMaterialDto) =>
-      materialService.createMaterial(newMaterial),
+    useAuthedEffectfullMutation((newMaterial: CreateMaterialDto) =>
+      materialService.create(newMaterial)
     );
-  const { data } = useAuthedQuery('subjects', () => subjectService.getAll());
+  const { data } = useAuthedEffectfullQuery('subjects', () =>
+    subjectService.getAll()
+  );
 
   const classes = data?.data ?? [];
 

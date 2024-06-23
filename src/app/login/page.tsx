@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import LoginForm from './components/LoginForm';
 import Link from 'next/link';
-import { useAuthedMutation } from '../hooks/useAuthedMutation.hook';
+import { useAuthedEffectfullMutation } from '../hooks/useAuthedEffectfullMutation.hook';
 import {
   AuthService,
   LoginDataDTO,
@@ -20,7 +20,7 @@ export default function Login() {
     isError,
     error,
     isSuccess,
-  } = useAuthedMutation(
+  } = useAuthedEffectfullMutation(
     (authData: LoginDataDTO) => authService.login(authData),
     {
       onSuccess: ({ data }) => {

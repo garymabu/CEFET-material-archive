@@ -2,7 +2,7 @@
 
 import { useForm } from 'react-hook-form';
 import { PasswordResetStageProps } from '../page';
-import { useAuthedMutation } from '@/app/hooks/useAuthedMutation.hook';
+import { useAuthedEffectfullMutation } from '@/app/hooks/useAuthedEffectfullMutation.hook';
 import { AuthService } from '@/app/integration/cefet-material-archive/auth/auth.service';
 
 export default function CheckUserForm({
@@ -18,7 +18,7 @@ export default function CheckUserForm({
     isError,
     error,
     isSuccess,
-  } = useAuthedMutation(
+  } = useAuthedEffectfullMutation(
     (email: string) => authService.challengeEmailIfExists(email),
     {
       onSuccess: ({ data: { userId } }) => {

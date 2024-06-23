@@ -9,11 +9,11 @@ import TableHead from '@mui/material/TableHead';
 import Paper from '@mui/material/Paper';
 import TablePaginationActions from '../TablePaginationActions';
 import { useState, ChangeEvent, MouseEvent, useEffect } from 'react';
-import { useAuthedQuery } from '@/app/hooks/useAuthedQuery.hook';
+import { useAuthedEffectfullQuery } from '@/app/hooks/useAuthedEffectfullQuery.hook';
 import { SubjectService } from '@/app/integration/cefet-material-archive/subject/user.service';
 import { Teacher } from '@/app/entity/teacher.entity';
 import { Subject } from '@/app/entity/subject.entity';
-import { useAuthedMutation } from '@/app/hooks/useAuthedMutation.hook';
+import { useAuthedEffectfullMutation } from '@/app/hooks/useAuthedEffectfullMutation.hook';
 
 const rows = [
   { name: 'Prova 1', classes: 'Matemática', createdAt: '2021-10-10' },
@@ -38,33 +38,28 @@ const rows = [
 ];
 
 interface SubjectTableProps {
-  openDialog: () => void;
-  isModalOpen: boolean;
+  data?: Subject[];
+  onDelete: () => void;
 }
 
-export default function SubjectTable({ openDialog, isModalOpen }: SubjectTableProps) {
+export default function SubjectTable({ onDelete, data }: SubjectTableProps) {
   const subjectService = new SubjectService();
-  const { data, refetch: refreshSubjects } = useAuthedQuery('materials', () =>
-    subjectService.getAll()
-  );
-  const { mutate: deleteSubject } = useAuthedMutation(
+  // const { data, refetch: refreshSubjects } = useAuthedEffectfullQuery(
+  //   'materials',
+  //   () => subjectService.getAll()
+  // );
+  const { mutate: deleteSubject } = useAuthedEffectfullMutation(
     (id: number) => subjectService.deleteSubject(id),
     {
       onSuccess: () => {
-        refreshSubjects();
+        onDelete();
       },
     }
   );
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  useEffect(() => {
-      refreshSubjects();
-  }, [isModalOpen])
-
-  const rows: Subject[] = data?.data ?? [];
-
-  console.log('rows', rows);
+  const rows: Subject[] = data ?? [];
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =

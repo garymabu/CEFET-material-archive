@@ -4,12 +4,15 @@ import { UserService } from '../user/user.service';
 import { UserType } from '../auth/auth.service';
 
 export class TeacherService {
-  constructor(private readonly httpClient: AxiosInstance = client) {}
+  constructor(
+    private readonly httpClient: AxiosInstance = client,
+    private readonly userService: UserService = new UserService()
+  ) {}
 
   async createTeacher(teacher: { name: string; email: string }) {
     const {
       data: { id },
-    } = await new UserService().createUser({
+    } = await this.userService.createUser({
       name: teacher.name,
       email: teacher.email,
       type: UserType.TEACHE,
@@ -19,7 +22,7 @@ export class TeacherService {
     });
   }
 
-  async getAllTeachers() {
+  async getAll() {
     return this.httpClient.get('/teacher');
   }
 

@@ -10,9 +10,9 @@ import Paper from '@mui/material/Paper';
 import TablePaginationActions from '../TablePaginationActions';
 import { useState, ChangeEvent, MouseEvent, useEffect } from 'react';
 import { TeacherService } from '@/app/integration/cefet-material-archive/teacher/teacher.service';
-import { useAuthedQuery } from '@/app/hooks/useAuthedQuery.hook';
+import { useAuthedEffectfullQuery } from '@/app/hooks/useAuthedEffectfullQuery.hook';
 import { Teacher } from '@/app/entity/teacher.entity';
-import { useAuthedMutation } from '@/app/hooks/useAuthedMutation.hook';
+import { useAuthedEffectfullMutation } from '@/app/hooks/useAuthedEffectfullMutation.hook';
 
 const rows = [
   { name: 'Prova 1', classes: 'Matemática', createdAt: '2021-10-10' },
@@ -37,29 +37,29 @@ const rows = [
 ];
 
 interface ProfessorTableProps {
-  openDialog: (id: number) => void;
-  isModalOpen: boolean;
+  data?: Teacher[];
+  onDelete: () => void;
 }
 
-export default function ProfessorTable({ openDialog, isModalOpen }: ProfessorTableProps) {
+export default function ProfessorTable({
+  onDelete,
+  data,
+}: ProfessorTableProps) {
   const teacherService = new TeacherService();
-  const { data, refetch: refreshStudents } = useAuthedQuery('teacher', () =>
-    teacherService.getAllTeachers()
-  );
-  const { mutate: deleteTeacher } = useAuthedMutation(
+  // const { data, refetch: refreshStudents } = useAuthedEffectfullQuery(
+  //   'teacher',
+  //   () => teacherService.getAllTeachers()
+  // );
+  const { mutate: deleteTeacher } = useAuthedEffectfullMutation(
     (id: number) => teacherService.deleteTeacher(id),
     {
       onSuccess: () => {
-        refreshStudents();
+        onDelete();
       },
     }
   );
 
-  useEffect(() => {
-    refreshStudents();
-  }, [isModalOpen])
-
-  const rows: Teacher[] = data?.data ?? [];
+  const rows: Teacher[] = data ?? [];
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
