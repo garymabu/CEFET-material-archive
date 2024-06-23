@@ -8,7 +8,7 @@ import TableRow from '@mui/material/TableRow';
 import TableHead from '@mui/material/TableHead';
 import Paper from '@mui/material/Paper';
 import TablePaginationActions from '../TablePaginationActions';
-import { useState, ChangeEvent, MouseEvent } from 'react';
+import { useState, ChangeEvent, MouseEvent, useEffect } from 'react';
 import { TeacherService } from '@/app/integration/cefet-material-archive/teacher/teacher.service';
 import { useAuthedQuery } from '@/app/hooks/useAuthedQuery.hook';
 import { Teacher } from '@/app/entity/teacher.entity';
@@ -38,9 +38,10 @@ const rows = [
 
 interface ProfessorTableProps {
   openDialog: (id: number) => void;
+  isModalOpen: boolean;
 }
 
-export default function ProfessorTable({ openDialog }: ProfessorTableProps) {
+export default function ProfessorTable({ openDialog, isModalOpen }: ProfessorTableProps) {
   const teacherService = new TeacherService();
   const { data, refetch: refreshStudents } = useAuthedQuery('teacher', () =>
     teacherService.getAllTeachers()
@@ -53,6 +54,10 @@ export default function ProfessorTable({ openDialog }: ProfessorTableProps) {
       },
     }
   );
+
+  useEffect(() => {
+    refreshStudents();
+  }, [isModalOpen])
 
   const rows: Teacher[] = data?.data ?? [];
 

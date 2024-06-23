@@ -8,7 +8,7 @@ import TableRow from '@mui/material/TableRow';
 import TableHead from '@mui/material/TableHead';
 import Paper from '@mui/material/Paper';
 import TablePaginationActions from '../TablePaginationActions';
-import { useState, ChangeEvent, MouseEvent } from 'react';
+import { useState, ChangeEvent, MouseEvent, useEffect } from 'react';
 import { UserService } from '@/app/integration/cefet-material-archive/user/user.service';
 import { useAuthedQuery } from '@/app/hooks/useAuthedQuery.hook';
 import { User } from '@/app/entity/user.entity';
@@ -16,9 +16,10 @@ import { useAuthedMutation } from '@/app/hooks/useAuthedMutation.hook';
 
 interface StudentTableProps {
   openDialog: () => void;
+  isModalOpen: boolean;
 }
 
-export default function StudentTable({ openDialog }: StudentTableProps) {
+export default function StudentTable({ openDialog, isModalOpen }: StudentTableProps) {
   const userService = new UserService();
   const { data, refetch: refreshStudents } = useAuthedQuery('materials', () =>
     userService.getAllStudents()
@@ -31,6 +32,10 @@ export default function StudentTable({ openDialog }: StudentTableProps) {
       },
     }
   );
+
+  useEffect(() => {
+    refreshStudents();
+  }, [refreshStudents, isModalOpen])
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);

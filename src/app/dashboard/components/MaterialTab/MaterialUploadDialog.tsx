@@ -50,7 +50,7 @@ export default function MaterialUploadDialog({
   });
   const { mutate: createMaterial, isSuccess: successfullCreateMaterial } =
     useAuthedMutation((newMaterial: CreateMaterialDto) =>
-      materialService.createMaterial(newMaterial)
+      materialService.createMaterial(newMaterial),
     );
   const { data } = useAuthedQuery('subjects', () => subjectService.getAll());
 

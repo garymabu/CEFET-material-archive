@@ -8,7 +8,7 @@ import TableRow from '@mui/material/TableRow';
 import TableHead from '@mui/material/TableHead';
 import Paper from '@mui/material/Paper';
 import TablePaginationActions from '../TablePaginationActions';
-import { useState, ChangeEvent, MouseEvent } from 'react';
+import { useState, ChangeEvent, MouseEvent, useEffect } from 'react';
 import { useAuthedQuery } from '@/app/hooks/useAuthedQuery.hook';
 import { SubjectService } from '@/app/integration/cefet-material-archive/subject/user.service';
 import { Teacher } from '@/app/entity/teacher.entity';
@@ -39,9 +39,10 @@ const rows = [
 
 interface SubjectTableProps {
   openDialog: () => void;
+  isModalOpen: boolean;
 }
 
-export default function SubjectTable({ openDialog }: SubjectTableProps) {
+export default function SubjectTable({ openDialog, isModalOpen }: SubjectTableProps) {
   const subjectService = new SubjectService();
   const { data, refetch: refreshSubjects } = useAuthedQuery('materials', () =>
     subjectService.getAll()
@@ -56,6 +57,10 @@ export default function SubjectTable({ openDialog }: SubjectTableProps) {
   );
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  useEffect(() => {
+      refreshSubjects();
+  }, [isModalOpen])
 
   const rows: Subject[] = data?.data ?? [];
 
@@ -96,7 +101,7 @@ export default function SubjectTable({ openDialog }: SubjectTableProps) {
           ).map((row) => (
             <TableRow key={row.name} className="w-full">
               <TableCell className="w-1/2">{row.name}</TableCell>
-              <TableCell className="w-1/2">{row.createdAt.toISOString()}</TableCell>
+              <TableCell className="w-1/2">{row.createdAt}</TableCell>
               <TableCell className="flex gap-4">
                 <button
                   onClick={() => {

@@ -52,7 +52,7 @@ export default function Dashboard() {
         {activeTab === Tab.FILE && (
           <div className="flex flex-col gap-8">
             <AddNewButton openDialog={openUploadDialog} />
-            <MaterialTable openFeedbackDialog={openFeedbackDialog} />
+            <MaterialTable isModalOpen={!!selectedMaterial} openFeedbackDialog={openFeedbackDialog} />
             <MaterialUploadDialog
               isUploadDialogOpen={isUploadDialogOpen}
               closeUploadDialog={closeUploadDialog}
@@ -69,7 +69,7 @@ export default function Dashboard() {
         {activeTab === Tab.STUDENT && (
           <div className="flex flex-col gap-8">
             <AddNewButton openDialog={openStudentDialog} />
-            <StudentTable openDialog={openStudentDialog} />
+            <StudentTable openDialog={openStudentDialog} isModalOpen={isStudentDialogOpen} />
             <StudentDialog
               isDialogOpen={isStudentDialogOpen}
               closeDialog={closeStudentDialog}
@@ -79,7 +79,7 @@ export default function Dashboard() {
         {activeTab === Tab.PROFESSOR && (
           <div className="flex flex-col gap-8">
             <AddNewButton openDialog={openProfessorDialog} />
-            <ProfessorTable openDialog={openProfessorDialog} />
+            <ProfessorTable openDialog={openProfessorDialog} isModalOpen={isProfessorDialogOpen} />
             <ProfessorDialog
               isDialogOpen={isProfessorDialogOpen}
               closeDialog={closeProfessorDialog}
@@ -89,7 +89,7 @@ export default function Dashboard() {
         {activeTab === Tab.SUBJECT && (
           <div className="flex flex-col gap-8">
             <AddNewButton openDialog={openSubjectDialog} />
-            <SubjectTable openDialog={openSubjectDialog} />
+            <SubjectTable openDialog={openSubjectDialog} isModalOpen={isSubjectDialogOpen} />
             <SubjectDialog
               isDialogOpen={isSubjectDialogOpen}
               closeDialog={closeSubjectDialog}

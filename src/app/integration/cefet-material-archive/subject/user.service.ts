@@ -9,7 +9,7 @@ export class SubjectService {
     return this.httpClient.get<Subject[]>('/subject');
   }
 
-  async createSubject(subject: { name: string; teacherId: number }) {
+  async createSubject(subject: { name: string; teacherId: number, term: number }) {
     return this.httpClient.post('/subject', subject);
   }
 

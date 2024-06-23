@@ -24,7 +24,12 @@ export default function StudentDialog({
 }: StudentDialogProps) {
   const userService = new UserService();
   const { mutate: createStudent } = useAuthedMutation(
-    (student: CreateUserDto) => userService.createUser(student)
+    (student: CreateUserDto) => userService.createUser(student),
+    {
+      onSuccess: () => {
+        closeDialog();
+      }
+    }
   );
   const { register, handleSubmit } = useForm({
     defaultValues: {

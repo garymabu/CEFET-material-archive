@@ -8,7 +8,7 @@ import TableRow from '@mui/material/TableRow';
 import TableHead from '@mui/material/TableHead';
 import Paper from '@mui/material/Paper';
 import TablePaginationActions from '../TablePaginationActions';
-import { useState, ChangeEvent, MouseEvent } from 'react';
+import { useState, ChangeEvent, MouseEvent, useEffect } from 'react';
 import { Material } from '@/app/entity/material.entity';
 import { useAuthedQuery } from '@/app/hooks/useAuthedQuery.hook';
 import { MaterialService } from '@/app/integration/cefet-material-archive/material/material.service';
@@ -16,10 +16,12 @@ import { useAuthedMutation } from '@/app/hooks/useAuthedMutation.hook';
 
 interface MaterialTableProps {
   openFeedbackDialog: (material: Material) => void;
+  isModalOpen: boolean,
 }
 
 export default function MaterialTable({
   openFeedbackDialog,
+  isModalOpen,
 }: MaterialTableProps) {
   const materialService = new MaterialService();
   const { data, refetch: refreshMaterials } = useAuthedQuery('materials', () =>
@@ -33,6 +35,10 @@ export default function MaterialTable({
       },
     }
   );
+
+  useEffect(() => {
+    refreshMaterials();
+  }, [isModalOpen])
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);

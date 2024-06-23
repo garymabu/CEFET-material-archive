@@ -6,6 +6,12 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import { useForm } from 'react-hook-form';
+import { SubjectService } from '@/app/integration/cefet-material-archive/subject/user.service';
+import { useAuthedMutation } from '@/app/hooks/useAuthedMutation.hook';
+import { TeacherService } from '@/app/integration/cefet-material-archive/teacher/teacher.service';
+import { useAuthedQuery } from '@/app/hooks/useAuthedQuery.hook';
+import { MenuItem, Select } from '@mui/material';
+import { Teacher } from '@/app/entity/teacher.entity';
 
 interface SubjectDialogProps {
   isDialogOpen: boolean;
@@ -16,11 +22,38 @@ export default function SubjectDialog({
   isDialogOpen,
   closeDialog,
 }: SubjectDialogProps) {
+  const subjectService = new SubjectService();
+  const teacherService = new TeacherService();
+  const {
+    mutate,
+  } = useAuthedMutation(
+    ({teacherId,name,term}: {term:number, teacherId:number, name: string}) => subjectService.createSubject(
+      {
+        name,
+        teacherId,
+        term,
+      }
+    ),
+    {
+      onSuccess: () => {
+        closeDialog()
+      }
+    }
+  );
+  const {
+    data: allTeachers,
+  } = useAuthedQuery(
+    'teachers',
+    () => 
+      teacherService.getAllTeachers()
+  )
+
+  const allTeachersData : Teacher[] = allTeachers?.data || [];
   const { register, handleSubmit } = useForm({
     defaultValues: {
       name: '',
-      professorId: -1,
-      term: -1,
+      teacherId: -1,
+      term: 1,
     },
   });
   return (
@@ -32,7 +65,9 @@ export default function SubjectDialog({
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <form onSubmit={handleSubmit(() => {})}>
+      <form onSubmit={handleSubmit((vals) => {
+        mutate(vals);
+      })}>
         <DialogTitle id="alert-dialog-title">Nova Disciplina</DialogTitle>
         <DialogContent>
           <TextField
@@ -46,22 +81,26 @@ export default function SubjectDialog({
           />
         </DialogContent>
         <DialogContent>
-          <TextField
-            autoFocus
-            margin="normal"
-            label="Email"
-            type="email"
-            fullWidth
-            variant="outlined"
-            {...register('professorId')}
-          />
+        <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            label="Age"
+            className="w-full"
+            {...register('teacherId')}
+          >
+            {allTeachersData.map((teacher) => (
+              <MenuItem key={teacher.id} value={teacher.id}>
+                {teacher.user.displayName}
+              </MenuItem>
+            ))}
+          </Select>
         </DialogContent>
         <DialogContent>
           <TextField
             autoFocus
             margin="normal"
-            label="Email"
-            type="email"
+            label="Periodo"
+            type="number"
             fullWidth
             variant="outlined"
             {...register('term')}
@@ -69,7 +108,7 @@ export default function SubjectDialog({
         </DialogContent>
         <DialogActions>
           <Button onClick={closeDialog}>Fechar</Button>
-          <Button onClick={closeDialog}>Confirmar</Button>
+          <Button type='submit'>Confirmar</Button>
         </DialogActions>
       </form>
     </Dialog>

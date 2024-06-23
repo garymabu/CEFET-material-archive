@@ -5,7 +5,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import SubjectSelector from './SubjectSelector';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
@@ -31,11 +31,16 @@ export default function ProfessorDialog({
   closeDialog,
 }: ProfessorDialogProps) {
   const teacherService = new TeacherService();
-  const { mutate } = useAuthedMutation(
+  const { mutate, isSuccess } = useAuthedMutation(
     (data: { name: string; email: string }) =>
       teacherService.createTeacher(data),
-    {}
   );
+
+  useEffect(()=>{
+    if(isSuccess)
+      closeDialog();
+  }, [isSuccess, closeDialog])
+  
   const { register, handleSubmit } = useForm({
     defaultValues: {
       name: '',
