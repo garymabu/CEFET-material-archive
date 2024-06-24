@@ -21,9 +21,16 @@ export class TeacherService {
       userId: id,
     });
   }
-
-  async getAll() {
-    return this.httpClient.get('/teacher');
+  
+  async getAll(name?: string, date?: string) {
+    let url = '/subject';
+    if (name) {
+      url += `?name=${name}`;
+    }
+    if (date) {
+      url += `${name ? '&' : '?'}createdAt=${date}`;
+    }
+    return this.httpClient.get(url);
   }
 
   async deleteTeacher(teacherId: number) {

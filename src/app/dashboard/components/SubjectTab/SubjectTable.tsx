@@ -9,33 +9,9 @@ import TableHead from '@mui/material/TableHead';
 import Paper from '@mui/material/Paper';
 import TablePaginationActions from '../TablePaginationActions';
 import { useState, ChangeEvent, MouseEvent, useEffect } from 'react';
-import { useAuthedEffectfullQuery } from '@/app/hooks/useAuthedEffectfullQuery.hook';
-import { SubjectService } from '@/app/integration/cefet-material-archive/subject/user.service';
-import { Teacher } from '@/app/entity/teacher.entity';
+import { SubjectService } from '@/app/integration/cefet-material-archive/subject/subject.service';
 import { Subject } from '@/app/entity/subject.entity';
 import { useAuthedEffectfullMutation } from '@/app/hooks/useAuthedEffectfullMutation.hook';
-
-const rows = [
-  { name: 'Prova 1', classes: 'Matemática', createdAt: '2021-10-10' },
-  { name: 'Prova 2', classes: 'Português', createdAt: '2021-10-10' },
-  { name: 'Prova 3', classes: 'História', createdAt: '2021-10-10' },
-  { name: 'Prova 4', classes: 'Geografia', createdAt: '2021-10-10' },
-  { name: 'Prova 5', classes: 'Física', createdAt: '2021-10-10' },
-  { name: 'Prova 6', classes: 'Química', createdAt: '2021-10-10' },
-  { name: 'Prova 7', classes: 'Biologia', createdAt: '2021-10-10' },
-  { name: 'Prova 8', classes: 'Inglês', createdAt: '2021-10-10' },
-  { name: 'Prova 9', classes: 'Espanhol', createdAt: '2021-10-10' },
-  { name: 'Prova 10', classes: 'Artes', createdAt: '2021-10-10' },
-  { name: 'Prova 11', classes: 'Educação Física', createdAt: '2021-10-10' },
-  { name: 'Prova 12', classes: 'Filosofia', createdAt: '2021-10-10' },
-  { name: 'Prova 13', classes: 'Sociologia', createdAt: '2021-10-10' },
-  { name: 'Prova 14', classes: 'Ensino Religioso', createdAt: '2021-10-10' },
-  { name: 'Prova 15', classes: 'Língua Portuguesa', createdAt: '2021-10-10' },
-  { name: 'Prova 16', classes: 'Matemática', createdAt: '2021-10-10' },
-  { name: 'Prova 17', classes: 'Português', createdAt: '2021-10-10' },
-  { name: 'Prova 18', classes: 'História', createdAt: '2021-10-10' },
-  { name: 'Prova 19', classes: 'Geografia', createdAt: '2021-10-10' },
-];
 
 interface SubjectTableProps {
   data?: Subject[];
@@ -44,10 +20,7 @@ interface SubjectTableProps {
 
 export default function SubjectTable({ onDelete, data }: SubjectTableProps) {
   const subjectService = new SubjectService();
-  // const { data, refetch: refreshSubjects } = useAuthedEffectfullQuery(
-  //   'materials',
-  //   () => subjectService.getAll()
-  // );
+
   const { mutate: deleteSubject } = useAuthedEffectfullMutation(
     (id: number) => subjectService.deleteSubject(id),
     {

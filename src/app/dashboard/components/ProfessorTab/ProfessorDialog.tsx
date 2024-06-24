@@ -4,15 +4,8 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
-import SubjectSelector from './SubjectSelector';
-import { useEffect, useState } from 'react';
-import TableBody from '@mui/material/TableBody';
-import TableRow from '@mui/material/TableRow';
-import TableCell from '@mui/material/TableCell';
-import { useAuthedEffectfullQuery } from '@/app/hooks/useAuthedEffectfullQuery.hook';
+import { useEffect } from 'react';
 import { TeacherService } from '@/app/integration/cefet-material-archive/teacher/teacher.service';
-import { SubjectService } from '@/app/integration/cefet-material-archive/subject/user.service';
-import { MenuItem, Select } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { useAuthedEffectfullMutation } from '@/app/hooks/useAuthedEffectfullMutation.hook';
 

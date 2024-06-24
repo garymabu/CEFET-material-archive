@@ -1,7 +1,7 @@
 import Rating from '@mui/material/Rating';
 import Box from '@mui/material/Box';
 import StarIcon from '@mui/icons-material/Star';
-import { use, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuthedEffectfullMutation } from '@/app/hooks/useAuthedEffectfullMutation.hook';
 import { MaterialService } from '@/app/integration/cefet-material-archive/material/material.service';
 

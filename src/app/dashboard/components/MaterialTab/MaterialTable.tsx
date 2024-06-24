@@ -8,7 +8,7 @@ import TableRow from '@mui/material/TableRow';
 import TableHead from '@mui/material/TableHead';
 import Paper from '@mui/material/Paper';
 import TablePaginationActions from '../TablePaginationActions';
-import { useState, ChangeEvent, MouseEvent, useEffect } from 'react';
+import { useState, ChangeEvent, MouseEvent } from 'react';
 import { Material, MaterialWithRating } from '@/app/entity/material.entity';
 import { MaterialService } from '@/app/integration/cefet-material-archive/material/material.service';
 import { useAuthedEffectfullMutation } from '@/app/hooks/useAuthedEffectfullMutation.hook';
@@ -66,7 +66,7 @@ export default function MaterialTable({
             <TableCell>Nome</TableCell>
             <TableCell>Disciplina</TableCell>
             <TableCell>Avaliação</TableCell>
-            <TableCell>Ações</TableCell>
+            <TableCell align='right'>Ações</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -75,18 +75,18 @@ export default function MaterialTable({
             : rows
           ).map((row) => (
             <TableRow key={row.id} className="w-full">
-              <TableCell className="w-1/2">{row?.description}</TableCell>
-              <TableCell className="w-1/2">{row?.subject?.name}</TableCell>
-              <TableCell className="w-1/2">
+              <TableCell className="w-1/4">{row?.description}</TableCell>
+              <TableCell className="w-1/4">{row?.subject?.name}</TableCell>
+              <TableCell className="w-1/4">
                 <Rating
                   disabled
                   value={row?.rating ?? 0}
                   precision={0.5}
                 ></Rating>
               </TableCell>
-              <TableCell className="flex gap-4">
+              <TableCell align='right'>
                 <button
-                  className="bg-transparent text-purple-400 border border-solid border-purple-400 font-bold py-2 px-4 rounded"
+                  className="bg-transparent text-purple-400 border border-solid border-purple-400 font-bold py-2 px-4 mr-2 rounded"
                   onClick={() => {
                     openFeedbackDialog(row);
                   }}

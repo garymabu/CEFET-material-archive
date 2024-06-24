@@ -13,16 +13,21 @@ export interface CreateUserDto {
 export class UserService {
   constructor(private readonly httpClient: AxiosInstance = client) {}
 
-  async getAllStudents() {
-    return this.httpClient.get<User[]>('/user', {
-      params: { type: UserType.STUDENT },
-    });
-  }
-
   async getCurrentUser() {
     const userId = AuthStorage.get().userId;
     console.log('getting current user', userId);
     return this.httpClient.get<User>(`/user/${userId}`);
+  }
+
+  async getAllStudents(name?: string, date?: string) {
+    let url = '/subject';
+    if (name) {
+      url += `?name=${name}`;
+    }
+    if (date) {
+      url += `${name ? '&' : '?'}createdAt=${date}`;
+    }
+    return this.httpClient.get<User[]>(url);
   }
 
   async changePassword(userId: number, password: string) {

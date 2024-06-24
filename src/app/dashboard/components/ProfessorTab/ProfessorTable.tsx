@@ -8,33 +8,10 @@ import TableRow from '@mui/material/TableRow';
 import TableHead from '@mui/material/TableHead';
 import Paper from '@mui/material/Paper';
 import TablePaginationActions from '../TablePaginationActions';
-import { useState, ChangeEvent, MouseEvent, useEffect } from 'react';
+import { useState, ChangeEvent, MouseEvent } from 'react';
 import { TeacherService } from '@/app/integration/cefet-material-archive/teacher/teacher.service';
-import { useAuthedEffectfullQuery } from '@/app/hooks/useAuthedEffectfullQuery.hook';
 import { Teacher } from '@/app/entity/teacher.entity';
 import { useAuthedEffectfullMutation } from '@/app/hooks/useAuthedEffectfullMutation.hook';
-
-const rows = [
-  { name: 'Prova 1', classes: 'Matemática', createdAt: '2021-10-10' },
-  { name: 'Prova 2', classes: 'Português', createdAt: '2021-10-10' },
-  { name: 'Prova 3', classes: 'História', createdAt: '2021-10-10' },
-  { name: 'Prova 4', classes: 'Geografia', createdAt: '2021-10-10' },
-  { name: 'Prova 5', classes: 'Física', createdAt: '2021-10-10' },
-  { name: 'Prova 6', classes: 'Química', createdAt: '2021-10-10' },
-  { name: 'Prova 7', classes: 'Biologia', createdAt: '2021-10-10' },
-  { name: 'Prova 8', classes: 'Inglês', createdAt: '2021-10-10' },
-  { name: 'Prova 9', classes: 'Espanhol', createdAt: '2021-10-10' },
-  { name: 'Prova 10', classes: 'Artes', createdAt: '2021-10-10' },
-  { name: 'Prova 11', classes: 'Educação Física', createdAt: '2021-10-10' },
-  { name: 'Prova 12', classes: 'Filosofia', createdAt: '2021-10-10' },
-  { name: 'Prova 13', classes: 'Sociologia', createdAt: '2021-10-10' },
-  { name: 'Prova 14', classes: 'Ensino Religioso', createdAt: '2021-10-10' },
-  { name: 'Prova 15', classes: 'Língua Portuguesa', createdAt: '2021-10-10' },
-  { name: 'Prova 16', classes: 'Matemática', createdAt: '2021-10-10' },
-  { name: 'Prova 17', classes: 'Português', createdAt: '2021-10-10' },
-  { name: 'Prova 18', classes: 'História', createdAt: '2021-10-10' },
-  { name: 'Prova 19', classes: 'Geografia', createdAt: '2021-10-10' },
-];
 
 interface ProfessorTableProps {
   data?: Teacher[];
@@ -46,10 +23,7 @@ export default function ProfessorTable({
   data,
 }: ProfessorTableProps) {
   const teacherService = new TeacherService();
-  // const { data, refetch: refreshStudents } = useAuthedEffectfullQuery(
-  //   'teacher',
-  //   () => teacherService.getAllTeachers()
-  // );
+  
   const { mutate: deleteTeacher } = useAuthedEffectfullMutation(
     (id: number) => teacherService.deleteTeacher(id),
     {
@@ -67,10 +41,8 @@ export default function ProfessorTable({
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
-  // page > 0 ? Math.max(0, (1 + page) * rowsPerPage - 0) : 0;
 
   const handleChangePage = (
-    event: MouseEvent<HTMLButtonElement> | null,
     newPage: number
   ) => {
     setPage(newPage);
@@ -99,7 +71,7 @@ export default function ProfessorTable({
             ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             : rows
           ).map((row) => (
-            <TableRow key={row?.user?.displayName} className="w-full">
+            <TableRow key={row?.id} className="w-full">
               <TableCell className="w-1/3">{row?.user?.displayName}</TableCell>
               <TableCell className="w-1/3">
                 {(row?.subjects ?? []).map((subj) => subj.name).join(', ')}

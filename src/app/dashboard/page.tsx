@@ -15,11 +15,15 @@ import SubjectDialog from './components/SubjectTab/SubjectDialog';
 import { Material } from '../entity/material.entity';
 import { useAuthedEffectfullQuery } from '../hooks/useAuthedEffectfullQuery.hook';
 import { MaterialService } from '../integration/cefet-material-archive/material/material.service';
-import { SubjectService } from '../integration/cefet-material-archive/subject/user.service';
+import { SubjectService } from '../integration/cefet-material-archive/subject/subject.service';
 import { TeacherService } from '../integration/cefet-material-archive/teacher/teacher.service';
 import { UserService } from '../integration/cefet-material-archive/user/user.service';
 import { ModalLoaderProvider } from '../components/ModalLoaderProvider';
 import { ErrorToastProvider } from '../components/ErrorToastProvider';
+import ProfessorFilter from './components/ProfessorTab/ProfessorFilter';
+import MaterialFilter from './components/MaterialTab/MaterialFilter';
+import StudentFilter from './components/StudentTab/StudentFilter';
+import SubjectFilter from './components/SubjectTab/SubjectFilter';
 
 export enum Tab {
   FILE = 'FILE',
@@ -36,6 +40,12 @@ function Dashboard() {
   const [isProfessorDialogOpen, setIsProfessorDialogOpen] = useState(false);
   const [isStudentDialogOpen, setIsStudentDialogOpen] = useState(false);
   const [isSubjectDialogOpen, setIsSubjectDialogOpen] = useState(false);
+
+  const [materialFilter, setMaterialFilter] = useState({ name: '', subjectId: -1 });
+  const [professorFilter, setProfessorFilter] = useState({ name: '', subjectId: -1, date: '' });
+  const [studentFilter, setStudentFilter] = useState({ name: '', date: '' });
+  const [subjectFilter, setSubjectFilter] = useState({ name: '', date: '' });
+
   const materialService = new MaterialService();
   const subjectService = new SubjectService();
   const teacherService = new TeacherService();
@@ -96,6 +106,10 @@ function Dashboard() {
           <section>
             {activeTab === Tab.FILE && (
               <div className="flex flex-col gap-8">
+                <MaterialFilter
+                  onFilter={refreshMaterials}
+                  setParams={setMaterialFilter}
+                />
                 <AddNewButton openDialog={openUploadDialog} />
                 <MaterialTable
                   onSelectFeedbackDialog={openFeedbackDialog}
@@ -118,6 +132,10 @@ function Dashboard() {
             )}
             {activeTab === Tab.STUDENT && (
               <div className="flex flex-col gap-8">
+                <StudentFilter
+                  onFilter={refreshStudents}
+                  setParams={setStudentFilter}
+                />
                 <AddNewButton openDialog={openStudentDialog} />
                 <StudentTable
                   onDelete={refreshStudents}
@@ -131,6 +149,10 @@ function Dashboard() {
             )}
             {activeTab === Tab.PROFESSOR && (
               <div className="flex flex-col gap-8">
+                <ProfessorFilter
+                  onFilter={refreshTeachers}
+                  setParams={setProfessorFilter}
+                />
                 <AddNewButton openDialog={openProfessorDialog} />
                 <ProfessorTable
                   onDelete={refreshTeachers}
@@ -144,6 +166,10 @@ function Dashboard() {
             )}
             {activeTab === Tab.SUBJECT && (
               <div className="flex flex-col gap-8">
+                <SubjectFilter
+                  onFilter={refreshSubjects}
+                  setParams={setSubjectFilter}
+                />
                 <AddNewButton openDialog={openSubjectDialog} />
                 <SubjectTable
                   onDelete={refreshSubjects}

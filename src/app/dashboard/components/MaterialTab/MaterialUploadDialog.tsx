@@ -1,4 +1,3 @@
-import { Material } from '@/app/entity/material.entity';
 import { useAuthedEffectfullMutation } from '@/app/hooks/useAuthedEffectfullMutation.hook';
 import { useAuthedEffectfullQuery } from '@/app/hooks/useAuthedEffectfullQuery.hook';
 import { FileService } from '@/app/integration/cefet-material-archive/file/file.service';
@@ -6,7 +5,7 @@ import {
   CreateMaterialDto,
   MaterialService,
 } from '@/app/integration/cefet-material-archive/material/material.service';
-import { SubjectService } from '@/app/integration/cefet-material-archive/subject/user.service';
+import { SubjectService } from '@/app/integration/cefet-material-archive/subject/subject.service';
 import { MenuItem, Select } from '@mui/material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';

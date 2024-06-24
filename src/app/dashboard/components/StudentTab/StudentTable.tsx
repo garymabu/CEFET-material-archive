@@ -21,10 +21,7 @@ interface StudentTableProps {
 
 export default function StudentTable({ data, onDelete }: StudentTableProps) {
   const userService = new UserService();
-  // const { data, refetch: refreshStudents } = useAuthedEffectfullQuery(
-  //   'students',
-  //   () => userService.getAllStudents()
-  // );
+
   const { mutate: deleteStudent } = useAuthedEffectfullMutation(
     (id: number) => userService.deleteStudent(id),
     {

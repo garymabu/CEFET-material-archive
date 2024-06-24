@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box, CircularProgress, Modal, Snackbar } from '@mui/material';
+import { Snackbar } from '@mui/material';
 import { ErrorToastContext } from '../contexts/errorToast.context';
 
 export const ErrorToastProvider = ({

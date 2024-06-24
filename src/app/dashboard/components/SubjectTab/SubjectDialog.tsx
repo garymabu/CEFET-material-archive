@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -6,7 +5,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import { useForm } from 'react-hook-form';
-import { SubjectService } from '@/app/integration/cefet-material-archive/subject/user.service';
+import { SubjectService } from '@/app/integration/cefet-material-archive/subject/subject.service';
 import { useAuthedEffectfullMutation } from '@/app/hooks/useAuthedEffectfullMutation.hook';
 import { TeacherService } from '@/app/integration/cefet-material-archive/teacher/teacher.service';
 import { useAuthedEffectfullQuery } from '@/app/hooks/useAuthedEffectfullQuery.hook';

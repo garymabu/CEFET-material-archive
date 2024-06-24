@@ -1,5 +1,4 @@
 import { useForm } from 'react-hook-form';
-import SubjectSelector from '../ProfessorTab/SubjectSelector';
 
 interface MaterialSeachInfo {
   name: string;

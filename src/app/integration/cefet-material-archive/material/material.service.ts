@@ -11,9 +11,18 @@ export interface CreateMaterialDto {
 export class MaterialService {
   constructor(private readonly httpClient: AxiosInstance = client) {}
 
-  async getAllWithRating() {
-    return this.httpClient.get<MaterialWithRating[]>('/material');
+  async getAllWithRating(name?: string, subject?: string) {
+    let url = '/subject';
+    if (name) {
+      url += `?name=${name}`;
+    }
+    if (subject) {
+      url += `${name ? '&' : '?'}subject=${subject}`;
+    }
+    return this.httpClient.get<MaterialWithRating[]>(url);
   }
+
+
   async create(material: CreateMaterialDto) {
     return this.httpClient.post('/material', material);
   }
