@@ -1,6 +1,6 @@
 import { AxiosInstance } from 'axios';
 import client from '../../axios/axios.client';
-import { Material, MaterialType } from '@/app/entity/material.entity';
+import { MaterialWithRating } from '@/app/entity/material.entity';
 
 export interface CreateMaterialDto {
   description: string;
@@ -11,13 +11,18 @@ export interface CreateMaterialDto {
 export class MaterialService {
   constructor(private readonly httpClient: AxiosInstance = client) {}
 
-  async getAll() {
-    return this.httpClient.get<Material[]>('/material');
+  async getAllWithRating() {
+    return this.httpClient.get<MaterialWithRating[]>('/material');
   }
   async create(material: CreateMaterialDto) {
     return this.httpClient.post('/material', material);
   }
   async delete(materialId: number) {
     return this.httpClient.delete(`/material/${materialId}`);
+  }
+  async rateMaterial(materialId: number, rating: number) {
+    return this.httpClient.post(`/material/${materialId}/rate`, {
+      value: rating,
+    });
   }
 }

@@ -9,13 +9,14 @@ import TableHead from '@mui/material/TableHead';
 import Paper from '@mui/material/Paper';
 import TablePaginationActions from '../TablePaginationActions';
 import { useState, ChangeEvent, MouseEvent, useEffect } from 'react';
-import { Material } from '@/app/entity/material.entity';
+import { Material, MaterialWithRating } from '@/app/entity/material.entity';
 import { MaterialService } from '@/app/integration/cefet-material-archive/material/material.service';
 import { useAuthedEffectfullMutation } from '@/app/hooks/useAuthedEffectfullMutation.hook';
+import { Rating } from '@mui/material';
 
 interface MaterialTableProps {
   onSelectFeedbackDialog: (material: Material) => void;
-  data?: Material[];
+  data?: MaterialWithRating[];
   onDelete: () => void;
 }
 
@@ -37,7 +38,7 @@ export default function MaterialTable({
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const rows: Material[] = data ?? [];
+  const rows = data ?? [];
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -64,6 +65,7 @@ export default function MaterialTable({
           <TableRow className="w-full">
             <TableCell>Nome</TableCell>
             <TableCell>Disciplina</TableCell>
+            <TableCell>Avaliação</TableCell>
             <TableCell>Ações</TableCell>
           </TableRow>
         </TableHead>
@@ -75,6 +77,13 @@ export default function MaterialTable({
             <TableRow key={row.id} className="w-full">
               <TableCell className="w-1/2">{row?.description}</TableCell>
               <TableCell className="w-1/2">{row?.subject?.name}</TableCell>
+              <TableCell className="w-1/2">
+                <Rating
+                  disabled
+                  value={row?.rating ?? 0}
+                  precision={0.5}
+                ></Rating>
+              </TableCell>
               <TableCell className="flex gap-4">
                 <button
                   className="bg-transparent text-purple-400 border border-solid border-purple-400 font-bold py-2 px-4 rounded"

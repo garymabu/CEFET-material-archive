@@ -15,3 +15,7 @@ export interface Material extends BaseEntity {
   dataUrl: string;
   subjectId: number;
 }
+
+export interface MaterialWithRating extends Material {
+  rating: number;
+}

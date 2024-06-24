@@ -42,9 +42,13 @@ function Dashboard() {
   const userService = new UserService();
 
   const { data: materialsResponse, refetch: refreshMaterials } =
-    useAuthedEffectfullQuery('materials', () => materialService.getAll(), {
-      enabled: activeTab === Tab.FILE,
-    });
+    useAuthedEffectfullQuery(
+      'materials',
+      () => materialService.getAllWithRating(),
+      {
+        enabled: activeTab === Tab.FILE,
+      }
+    );
   const { data: subjectsResponse, refetch: refreshSubjects } =
     useAuthedEffectfullQuery('subjects', () => subjectService.getAll(), {
       enabled: activeTab === Tab.SUBJECT,
@@ -104,6 +108,7 @@ function Dashboard() {
                 />
                 {selectedMaterial && (
                   <FeedbackModal
+                    refreshMaterials={refreshMaterials}
                     material={selectedMaterial}
                     isFeedBackDialogOpen={!!selectedMaterial}
                     closeFeedbackDialog={closeFeedbackDialog}

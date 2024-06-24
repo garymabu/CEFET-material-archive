@@ -11,12 +11,14 @@ interface FeedbackDialogProps {
   isFeedBackDialogOpen: boolean;
   closeFeedbackDialog: () => void;
   material: Material;
+  refreshMaterials: () => void;
 }
 
 export default function FeedbackDialog({
   isFeedBackDialogOpen,
   closeFeedbackDialog,
   material,
+  refreshMaterials,
 }: FeedbackDialogProps) {
   return (
     <Dialog
@@ -29,7 +31,10 @@ export default function FeedbackDialog({
     >
       <DialogTitle id="alert-dialog-title">{material?.description}</DialogTitle>
       <DialogContent className="flex justify-center items-center flex-col">
-        <HoverRating />
+        <HoverRating
+          refreshMaterials={refreshMaterials}
+          materialId={material.id}
+        />
         <a href={material?.dataUrl} target="_blank" rel="noreferrer">
           <Button variant="contained" color="primary">
             Visualizar
