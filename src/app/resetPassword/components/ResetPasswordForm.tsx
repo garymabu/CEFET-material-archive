@@ -23,7 +23,8 @@ export default function ResetPasswordForm({
       onSuccess: ({}) => {
         moveToNextStage();
       },
-    }
+    },
+    false
   );
   const { register, handleSubmit } = useForm({
     defaultValues: {

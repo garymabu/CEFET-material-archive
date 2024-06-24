@@ -18,7 +18,8 @@ export const useAuthedEffectfullMutation = <
   options?: Omit<
     UseMutationOptions<TData, AxiosError, TVariables, TContext>,
     'mutationFn'
-  >
+  >,
+  redirectWhenUnauthorized = true
 ) => {
   const { showLoader, hideLoader } = useContext(ModalLoaderContext);
   const { setCurrentError } = useContext(ErrorToastContext);
@@ -26,10 +27,10 @@ export const useAuthedEffectfullMutation = <
   const mutation = useMutation(mutationFn, options);
   useEffect(() => {
     const error = mutation.error;
-    if (error?.response?.status === 401) {
+    if (error?.response?.status === 401 && redirectWhenUnauthorized) {
       router.push(redirectRoute);
     }
-  }, [mutation.error, router]);
+  }, [mutation.error, router, redirectWhenUnauthorized]);
   useEffect(() => {
     const error = mutation.error;
     if (error) {
