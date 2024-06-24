@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import MaterialTable from './components/MaterialTab/MaterialTable';
 import FeedbackModal from './components/MaterialTab/FeedbackDialog';
 import MaterialUploadDialog from './components/MaterialTab/MaterialUploadDialog';
@@ -85,80 +85,77 @@ function Dashboard() {
     refreshSubjects();
   };
 
+  useEffect(() => {
+    refreshMaterials();
+  }, [isUploadDialogOpen, refreshMaterials]);
+
   return (
-    <ModalLoaderProvider>
-      <ErrorToastProvider>
-        <main className="p-12">
-          <TabButtonsContainer
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
-          />
-          <section>
-            {activeTab === Tab.FILE && (
-              <div className="flex flex-col gap-8">
-                <AddNewButton openDialog={openUploadDialog} />
-                <MaterialTable
-                  onSelectFeedbackDialog={openFeedbackDialog}
-                  data={materialsResponse?.data}
-                  onDelete={refreshMaterials}
-                />
-                <MaterialUploadDialog
-                  isUploadDialogOpen={isUploadDialogOpen}
-                  closeUploadDialog={closeUploadDialog}
-                />
-                {selectedMaterial && (
-                  <FeedbackModal
-                    refreshMaterials={refreshMaterials}
-                    material={selectedMaterial}
-                    isFeedBackDialogOpen={!!selectedMaterial}
-                    closeFeedbackDialog={closeFeedbackDialog}
-                  />
-                )}
-              </div>
+    <main className="p-12">
+      <TabButtonsContainer activeTab={activeTab} setActiveTab={setActiveTab} />
+      <section>
+        {activeTab === Tab.FILE && (
+          <div className="flex flex-col gap-8">
+            <AddNewButton openDialog={openUploadDialog} />
+            <MaterialTable
+              onSelectFeedbackDialog={openFeedbackDialog}
+              data={materialsResponse?.data}
+              onDelete={refreshMaterials}
+            />
+            <MaterialUploadDialog
+              isUploadDialogOpen={isUploadDialogOpen}
+              closeUploadDialog={closeUploadDialog}
+            />
+            {selectedMaterial && (
+              <FeedbackModal
+                refreshMaterials={refreshMaterials}
+                material={selectedMaterial}
+                isFeedBackDialogOpen={!!selectedMaterial}
+                closeFeedbackDialog={closeFeedbackDialog}
+              />
             )}
-            {activeTab === Tab.STUDENT && (
-              <div className="flex flex-col gap-8">
-                <AddNewButton openDialog={openStudentDialog} />
-                <StudentTable
-                  onDelete={refreshStudents}
-                  data={studentsResponse?.data}
-                />
-                <StudentDialog
-                  isDialogOpen={isStudentDialogOpen}
-                  closeDialog={closeStudentDialog}
-                />
-              </div>
-            )}
-            {activeTab === Tab.PROFESSOR && (
-              <div className="flex flex-col gap-8">
-                <AddNewButton openDialog={openProfessorDialog} />
-                <ProfessorTable
-                  onDelete={refreshTeachers}
-                  data={teachersResponse?.data}
-                />
-                <ProfessorDialog
-                  isDialogOpen={isProfessorDialogOpen}
-                  closeDialog={closeProfessorDialog}
-                />
-              </div>
-            )}
-            {activeTab === Tab.SUBJECT && (
-              <div className="flex flex-col gap-8">
-                <AddNewButton openDialog={openSubjectDialog} />
-                <SubjectTable
-                  onDelete={refreshSubjects}
-                  data={subjectsResponse?.data}
-                />
-                <SubjectDialog
-                  isDialogOpen={isSubjectDialogOpen}
-                  closeDialog={closeSubjectDialog}
-                />
-              </div>
-            )}
-          </section>
-        </main>
-      </ErrorToastProvider>
-    </ModalLoaderProvider>
+          </div>
+        )}
+        {activeTab === Tab.STUDENT && (
+          <div className="flex flex-col gap-8">
+            <AddNewButton openDialog={openStudentDialog} />
+            <StudentTable
+              onDelete={refreshStudents}
+              data={studentsResponse?.data}
+            />
+            <StudentDialog
+              isDialogOpen={isStudentDialogOpen}
+              closeDialog={closeStudentDialog}
+            />
+          </div>
+        )}
+        {activeTab === Tab.PROFESSOR && (
+          <div className="flex flex-col gap-8">
+            <AddNewButton openDialog={openProfessorDialog} />
+            <ProfessorTable
+              onDelete={refreshTeachers}
+              data={teachersResponse?.data}
+            />
+            <ProfessorDialog
+              isDialogOpen={isProfessorDialogOpen}
+              closeDialog={closeProfessorDialog}
+            />
+          </div>
+        )}
+        {activeTab === Tab.SUBJECT && (
+          <div className="flex flex-col gap-8">
+            <AddNewButton openDialog={openSubjectDialog} />
+            <SubjectTable
+              onDelete={refreshSubjects}
+              data={subjectsResponse?.data}
+            />
+            <SubjectDialog
+              isDialogOpen={isSubjectDialogOpen}
+              closeDialog={closeSubjectDialog}
+            />
+          </div>
+        )}
+      </section>
+    </main>
   );
 }
 
