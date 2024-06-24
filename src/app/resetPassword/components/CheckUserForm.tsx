@@ -25,7 +25,8 @@ export default function CheckUserForm({
         onReceiveUserId(userId);
         moveToNextStage();
       },
-    }
+    },
+    false
   );
   const { register, handleSubmit } = useForm({
     defaultValues: {

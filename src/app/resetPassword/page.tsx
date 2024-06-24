@@ -8,6 +8,7 @@ import ChallengeForm from './components/ChallengeForm';
 import { AuthResult } from '../integration/cefet-material-archive/auth/auth.service';
 import { AuthStorage } from '../storage/auth.storage';
 import { useRouter } from 'next/navigation';
+import { ErrorToastProvider } from '../components/ErrorToastProvider';
 
 enum ReAuthStage {
   Email,
@@ -25,8 +26,8 @@ export default function ResetPassword() {
   const [stage, setStage] = useState<ReAuthStage>(ReAuthStage.Email);
   const [authData, setAuthData] = useState<AuthResult>();
   const [userId, setUserId] = useState<string>();
-  const moveToNextStage = () => {
-    setStage((prev) => prev + 1);
+  const generateMoveToNextStageFn = (currentStage: number) => () => {
+    setStage((prev) => currentStage);
   };
 
   useEffect(() => {
@@ -39,41 +40,51 @@ export default function ResetPassword() {
   }, [stage, router]);
 
   return (
-    <main className="flex flex-row justify-center items-center h-screen bg-gray-200">
-      <section className="relative flex flex-col justify-between items-center h-[40rem] w-96 p-8 bg-gray-50">
+    <ErrorToastProvider>
+      <main className="flex flex-row justify-center items-center h-screen bg-gray-200">
+        <section className="relative flex flex-col justify-between items-center h-[40rem] w-96 p-8 bg-gray-50">
+          <Image
+            className="h-1/5"
+            src="/horiz_azul.png"
+            alt="books"
+            width={384}
+            height={640}
+          />
+          <div className="h-3/5">
+            {stage === ReAuthStage.Email && (
+              <CheckUserForm
+                onReceiveUserId={setUserId}
+                moveToNextStage={generateMoveToNextStageFn(
+                  ReAuthStage.ConfirmEmail
+                )}
+              />
+            )}
+            {stage === ReAuthStage.ConfirmEmail && (
+              <ChallengeForm
+                moveToNextStage={generateMoveToNextStageFn(
+                  ReAuthStage.Password
+                )}
+                onReceiveAuthData={setAuthData}
+                userId={userId}
+              />
+            )}
+            {stage === ReAuthStage.Password && (
+              <ResetPasswordForm
+                moveToNextStage={generateMoveToNextStageFn(
+                  ReAuthStage.Redirect
+                )}
+              />
+            )}
+          </div>
+          <div className="flex items-end h-1/5"></div>
+        </section>
         <Image
-          className="h-1/5"
-          src="/horiz_azul.png"
+          src="/Literature-Education.webp"
           alt="books"
           width={384}
           height={640}
         />
-        <div className="h-3/5">
-          {stage === ReAuthStage.Email && (
-            <CheckUserForm
-              onReceiveUserId={setUserId}
-              moveToNextStage={moveToNextStage}
-            />
-          )}
-          {stage === ReAuthStage.ConfirmEmail && (
-            <ChallengeForm
-              moveToNextStage={moveToNextStage}
-              onReceiveAuthData={setAuthData}
-              userId={userId}
-            />
-          )}
-          {stage === ReAuthStage.Password && (
-            <ResetPasswordForm moveToNextStage={moveToNextStage} />
-          )}
-        </div>
-        <div className="flex items-end h-1/5"></div>
-      </section>
-      <Image
-        src="/Literature-Education.webp"
-        alt="books"
-        width={384}
-        height={640}
-      />
-    </main>
+      </main>
+    </ErrorToastProvider>
   );
 }

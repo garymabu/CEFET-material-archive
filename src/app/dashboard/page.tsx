@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import MaterialTable from './components/MaterialTab/MaterialTable';
 import FeedbackModal from './components/MaterialTab/FeedbackDialog';
 import MaterialUploadDialog from './components/MaterialTab/MaterialUploadDialog';
@@ -94,6 +94,10 @@ function Dashboard() {
     setIsSubjectDialogOpen(false);
     refreshSubjects();
   };
+
+  useEffect(() => {
+    refreshMaterials();
+  }, [isUploadDialogOpen, refreshMaterials]);
 
   return (
     <ModalLoaderProvider>

@@ -5,7 +5,11 @@ import { ErrorToastContext } from '../contexts/errorToast.context';
 export const ErrorToastProvider = ({
   children,
 }: {
-  children: React.ReactElement;
+  children:
+    | React.ReactElement
+    | React.ReactElement[]
+    | React.ReactNode[]
+    | React.ReactNode;
 }) => {
   const [currentError, setCurrentError] = useState<string>();
 

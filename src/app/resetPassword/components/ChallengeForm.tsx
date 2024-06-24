@@ -28,7 +28,8 @@ export default function ChallengeForm({
         onReceiveAuthData(data);
         moveToNextStage();
       },
-    }
+    },
+    false
   );
   const { register, handleSubmit } = useForm({
     defaultValues: {
